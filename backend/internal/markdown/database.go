@@ -248,3 +248,38 @@ func extractTemplateFields(content string) map[string]string {
 	}
 	return fields
 }
+
+// databaseQueryRe matches a {database-query …} directive line and
+// captures its table= value (quoted or unquoted).
+var databaseQueryRe = regexp.MustCompile(`^\s*\{database-query\s[^}]*?\btable=(?:"([^"]+)"|'([^']+)'|([^\s}]+))`)
+
+// ExtractDatabaseQueryTables returns the tables queried by the
+// {database-query table=…} directives in content, in order of first
+// appearance, ignoring fenced code blocks. A page that lists a table's
+// rows links to every row-bound page of that table at render time, so
+// the backlinks of a row-bound page include the pages that query its
+// table.
+func ExtractDatabaseQueryTables(content string) []string {
+	var tables []string
+	seen := make(map[string]bool)
+	inCodeBlock := false
+	for _, line := range strings.Split(content, "\n") {
+		if strings.HasPrefix(strings.TrimSpace(line), "```") {
+			inCodeBlock = !inCodeBlock
+			continue
+		}
+		if inCodeBlock {
+			continue
+		}
+		m := databaseQueryRe.FindStringSubmatch(line)
+		if m == nil {
+			continue
+		}
+		table := m[1] + m[2] + m[3]
+		if table != "" && !seen[table] {
+			seen[table] = true
+			tables = append(tables, table)
+		}
+	}
+	return tables
+}

@@ -541,6 +541,7 @@ func (s *FileStore) putWithSummary(pagePath, markdownContent, author, summary st
 		if s.LinkIndex != nil {
 			newLinks := markdown.ExtractPageLinks(markdownContent, resolvePath)
 			s.LinkIndex.UpdatePage(normalized, newLinks)
+			s.LinkIndex.UpdatePageQueries(normalized, markdown.ExtractDatabaseQueryTables(markdownContent))
 		}
 
 		if s.TagIndex != nil {
@@ -1299,6 +1300,7 @@ func (s *FileStore) Move(oldPath, newPath string, moveMedia, updateLinks bool, a
 		s.LinkIndex.RemovePage(oldNorm)
 		newLinks := markdown.ExtractPageLinks(rebasedContent, newResolvePath)
 		s.LinkIndex.UpdatePage(newNorm, newLinks)
+		s.LinkIndex.UpdatePageQueries(newNorm, markdown.ExtractDatabaseQueryTables(rebasedContent))
 	}
 
 	if s.TagIndex != nil {
@@ -1432,9 +1434,35 @@ func (s *FileStore) FindOrphans() ([]string, error) {
 	return s.RefIndex.FindOrphans(s.contentRoot)
 }
 
-// GetBacklinks returns pages that link to the given page via internal hyperlinks.
+// GetBacklinks returns pages that link to the given page: pages with an
+// internal hyperlink to it, plus — when the page is bound to a database
+// row by {database-row table=T} — the pages whose {database-query}
+// lists table T, since they link to every row page of T when rendered.
 func (s *FileStore) GetBacklinks(pagePath string) []string {
-	return s.LinkIndex.GetBacklinks(pagePath)
+	result := s.LinkIndex.GetBacklinks(pagePath)
+	page, err := s.Get(pagePath)
+	if err != nil {
+		return result
+	}
+	seen := make(map[string]bool, len(result))
+	for _, p := range result {
+		seen[p] = true
+	}
+	added := false
+	for _, row := range markdown.ExtractDatabaseRows(page.Markdown) {
+		for _, q := range s.LinkIndex.GetQueryPages(row.TableName) {
+			if q == page.Path || seen[q] {
+				continue
+			}
+			seen[q] = true
+			result = append(result, q)
+			added = true
+		}
+	}
+	if added {
+		sort.Strings(result)
+	}
+	return result
 }
 
 // GetReferencingPages returns the list of pages that reference a given media file.
@@ -1499,6 +1527,7 @@ func (s *FileStore) RebuildIndexes() error {
 
 		pageLinks := markdown.ExtractPageLinks(contentStr, resolvePath)
 		linkIdx.UpdatePage(pagePath, pageLinks)
+		linkIdx.UpdatePageQueries(pagePath, markdown.ExtractDatabaseQueryTables(contentStr))
 
 		tags := markdown.ExtractTags(contentStr)
 		title := markdown.ExtractTitle(contentStr)

@@ -2,7 +2,12 @@
 
 ## Overview
 
-The backlinks feature shows all pages that link to the current page via internal hyperlinks (`[text](/path)`). This complements the existing include tracking (`IncludeIndex`) by also tracking page-to-page links.
+The backlinks feature shows all pages that link to the current page. Two sources count as a link:
+
+- an internal hyperlink (`[text](/path)`) to the page;
+- for a row-bound page (`{database-row table=T}`), a `{database-query table=T}` directive on the other page: the query lists the table's rows and links to each row page when rendered.
+
+This complements the existing include tracking (`IncludeIndex`).
 
 ## Backend
 
@@ -32,13 +37,14 @@ The backlinks feature shows all pages that link to the current page via internal
 - `Put()` extracts page links and calls `LinkIndex.UpdatePage()`
 - `Delete()` calls `LinkIndex.RemovePage()`
 - `RebuildIndexes()` rebuilds `LinkIndex` alongside other indexes
+- `Put()`, `Move()` and `RebuildIndexes()` also record each page's queried tables (`ExtractDatabaseQueryTables`) with `LinkIndex.UpdatePageQueries()`. This map is held in memory only and rebuilt at startup; `_links.json` keeps its format.
 
 ### API
 
 `GET /api/backlinks/{path}` — returns `{"backlinks": [{"path": "...", "title": "..."}]}`
 
 - Registered in the optionalAuth + view permission group
-- Handler looks up backlinks via `LinkIndex.GetBacklinks()`, then reads each page to extract its title
+- Handler looks up backlinks via `FileStore.GetBacklinks()` — hyperlink backlinks from `LinkIndex.GetBacklinks()`, plus, when the page carries `{database-row table=T}`, the pages from `LinkIndex.GetQueryPages(T)` — then reads each page to extract its title. Link rewriting on page moves uses the hyperlink backlinks only.
 
 ## Frontend
 

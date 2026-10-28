@@ -15,14 +15,51 @@ type LinkIndex struct {
 	mu          sync.RWMutex
 	basePath    string              // path to data/meta/ directory
 	PageToLinks map[string][]string `json:"page_to_links"`
+	// pageToQueryTables records, per page, the tables its
+	// {database-query} directives list. Kept in memory only: it is
+	// rebuilt with the rest of the index at startup.
+	pageToQueryTables map[string][]string
 }
 
 // NewLinkIndex creates a new LinkIndex. basePath is the meta directory.
 func NewLinkIndex(basePath string) *LinkIndex {
 	return &LinkIndex{
-		basePath:    basePath,
-		PageToLinks: make(map[string][]string),
+		basePath:          basePath,
+		PageToLinks:       make(map[string][]string),
+		pageToQueryTables: make(map[string][]string),
 	}
+}
+
+// UpdatePageQueries replaces the list of tables queried by a page.
+func (idx *LinkIndex) UpdatePageQueries(pagePath string, tables []string) {
+	idx.mu.Lock()
+	defer idx.mu.Unlock()
+	if idx.pageToQueryTables == nil {
+		idx.pageToQueryTables = make(map[string][]string)
+	}
+	if len(tables) == 0 {
+		delete(idx.pageToQueryTables, pagePath)
+		return
+	}
+	idx.pageToQueryTables[pagePath] = append([]string(nil), tables...)
+}
+
+// GetQueryPages returns the pages whose {database-query} lists table,
+// sorted.
+func (idx *LinkIndex) GetQueryPages(table string) []string {
+	idx.mu.RLock()
+	defer idx.mu.RUnlock()
+	var result []string
+	for page, tables := range idx.pageToQueryTables {
+		for _, t := range tables {
+			if t == table {
+				result = append(result, page)
+				break
+			}
+		}
+	}
+	sort.Strings(result)
+	return result
 }
 
 // Load reads the link index from disk (data/meta/_links.json).
@@ -105,6 +142,7 @@ func (idx *LinkIndex) RemovePage(pagePath string) {
 	defer idx.mu.Unlock()
 
 	delete(idx.PageToLinks, pagePath)
+	delete(idx.pageToQueryTables, pagePath)
 }
 
 // UpdatePage replaces the links for a page. If links is empty,
