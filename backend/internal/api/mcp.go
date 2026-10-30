@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/mcpserver"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/mcpserver"
 )
 
 // buildMCPHandler wires the MCP server with dependencies drawn from the

@@ -2,7 +2,7 @@
 
 ## Principle
 
-The Gowiki markdown dialect is **bijective**: one canonical syntax per construct. This means `markdown → PM → markdown` must be an identity after normalization, and `markdown → PM → markdown → PM → markdown` must be stable (pass1 = pass2).
+The Sargon markdown dialect is **bijective**: one canonical syntax per construct. This means `markdown → PM → markdown` must be an identity after normalization, and `markdown → PM → markdown → PM → markdown` must be stable (pass1 = pass2).
 
 Any change to the parser, serializer, or plugin inline rules must pass round-trip validation before deployment.
 

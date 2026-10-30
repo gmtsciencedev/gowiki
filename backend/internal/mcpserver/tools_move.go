@@ -9,7 +9,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // mapMoveError turns storage-package sentinel errors into user-facing MCP

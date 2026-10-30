@@ -11,7 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // handleDatabaseStatus returns the current database connection status.

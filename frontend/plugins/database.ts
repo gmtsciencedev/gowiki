@@ -179,7 +179,7 @@ const databaseNewRowProperties = [
 // populations), prepend a synthetic option so the reader sees SOMETHING
 // while the real options load. A MutationObserver then watches for the
 // real option to arrive and rewrites the synthetic's LABEL to match
-// it, so the reader sees "Gowiki" instead of the row id "1". The
+// it, so the reader sees "Sargon" instead of the row id "1". The
 // duplicate real option is hidden — the select is locked anyway, so
 // it would just be a duplicate in a dropdown nobody can open.
 //
@@ -3111,7 +3111,7 @@ function extractTitle(view: EditorView): string {
 function resolveGlobalVar(name: string, view: EditorView): string | null | undefined {
   if (!ALL_CAPS_RE.test(name)) return null
 
-  const ctx = (window as any).__gowikiGlobalVarContext?.()
+  const ctx = (window as any).__sargonGlobalVarContext?.()
   if (!ctx) return ""
 
   const meta = ctx.pageMeta
@@ -3370,7 +3370,7 @@ class TemplateVarNodeView {
   }
 
   private resolveAuthorDisplayAsync(name: string) {
-    const ctx = (window as any).__gowikiGlobalVarContext?.()
+    const ctx = (window as any).__sargonGlobalVarContext?.()
     if (!ctx?.pageMeta) return
 
     let username = ""

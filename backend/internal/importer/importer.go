@@ -15,7 +15,7 @@ import (
 // Options configures the importer.
 type Options struct {
 	SrcDir        string // DokuWiki import root (contains data/ and conf/)
-	DestDir       string // Gowiki data root (will contain content/, meta/)
+	DestDir       string // Sargon data root (will contain content/, meta/)
 	DryRun        bool
 	Verbose       bool
 	FallbackAdmin bool // Create an admin/admin fallback account with full permissions
@@ -133,7 +133,7 @@ func Run(opts Options) (*Report, error) {
 
 	// Phase 1b: Resolve namespace conflicts.
 	// In DokuWiki, both ns:page and ns:page:start can exist.
-	// In Gowiki, page.md and page/index.md cannot coexist.
+	// In Sargon, page.md and page/index.md cannot coexist.
 	// When both exist, prepend page.md content to page/index.md.
 	pages = resolveNamespaceConflicts(pages, opts.Verbose)
 

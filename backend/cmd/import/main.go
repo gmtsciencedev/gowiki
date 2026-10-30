@@ -6,13 +6,13 @@ import (
 	"log"
 	"os"
 
-	"gowiki/backend/internal/importer"
+	"sargon/backend/internal/importer"
 )
 
 func main() {
 	var (
 		srcDir        = flag.String("src", "", "DokuWiki import root (contains data/ and conf/ subdirectories)")
-		destDir       = flag.String("dest", "", "Gowiki data directory (will contain content/, meta/)")
+		destDir       = flag.String("dest", "", "Sargon data directory (will contain content/, meta/)")
 		dryRun        = flag.Bool("dry-run", false, "Analyze and report without writing files")
 		verbose       = flag.Bool("verbose", false, "Log each file being processed")
 		fallbackAdmin = flag.Bool("fallback-admin", false, "Create an admin/admin user with full permissions (useful when conf/ is missing)")

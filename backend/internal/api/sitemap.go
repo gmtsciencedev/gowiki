@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // SitemapLister is implemented by storage.FileStore.

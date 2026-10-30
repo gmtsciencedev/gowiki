@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// PageMetadata matches the Gowiki backend PageMetadata struct.
+// PageMetadata matches the Sargon backend PageMetadata struct.
 type PageMetadata struct {
 	ID        string           `json:"id"`
 	CreatedAt time.Time        `json:"created_at"`

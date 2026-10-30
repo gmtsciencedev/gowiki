@@ -339,7 +339,7 @@ class ReviewflowNodeView {
     this.getPos = getPos
 
     // Capture history version context (set by viewVersion() in main.js).
-    this.historyVersion = (window as any).__gowikiViewingVersion ?? null
+    this.historyVersion = (window as any).__sargonViewingVersion ?? null
 
     this.dom = document.createElement("div")
     this.dom.className = "gowiki-reviewflow"
@@ -348,7 +348,7 @@ class ReviewflowNodeView {
     this.render()
     this.fetchStatus()
     // Check if the current user has a signing key.
-    const currentUser = (window as any).__gowikiCurrentUser?.username
+    const currentUser = (window as any).__sargonCurrentUser?.username
     if (currentUser) {
       hasKey(currentUser)
         .then((has) => {
@@ -376,7 +376,7 @@ class ReviewflowNodeView {
     const backendHasState = this.status != null && Object.keys(this.status.roles || {}).length > 0
     const missingRoles = backendHasState ? this.status!.missing_roles || {} : roles
     const overdueSet = new Set(this.status?.overdue_roles || [])
-    const currentUser = (window as any).__gowikiCurrentUser?.username || ""
+    const currentUser = (window as any).__sargonCurrentUser?.username || ""
     const isValidated = backendHasState && this.status!.is_fully_validated === true
     const manualRelease = this.status?.manual_release ?? isTruthy(this.node.attrs.manual_release)
     const awaitingRelease = manualRelease && !this.status?.released
@@ -681,10 +681,10 @@ class ReviewflowNodeView {
       // Attempt cryptographic signing if enabled and user has a key.
       let sigData: { signature: string; certificate: string; digest: string } | null = null
       if (this.status?.signing_enabled && this.userHasKey) {
-        const currentUser = (window as any).__gowikiCurrentUser?.username
+        const currentUser = (window as any).__sargonCurrentUser?.username
         if (currentUser) {
           try {
-            const markdown = (window as any).__gowikiCurrentMarkdown?.() || ""
+            const markdown = (window as any).__sargonCurrentMarkdown?.() || ""
             sigData = await signConfirmation(currentUser, markdown)
             if (!sigData) {
               console.error("reviewflow: signConfirmation returned null — key or certificate not found")
@@ -991,7 +991,7 @@ class ReviewflowQueryNodeView {
     //             "what should I sign now?" case
     //   overdue — user's role is missing AND overdue
     const rawUser = String(this.node.attrs.user || "").trim()
-    const currentUser = (window as any).__gowikiCurrentUser?.username || ""
+    const currentUser = (window as any).__sargonCurrentUser?.username || ""
     const userFilter = rawUser === "@me" ? currentUser : rawUser
     const whenFilter = String(this.node.attrs.when || "any").toLowerCase()
     // signed_by is INDEPENDENT of user/when — it narrows to pages where

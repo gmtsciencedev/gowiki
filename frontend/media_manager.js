@@ -38,7 +38,7 @@ async function listMedia(namespacePath) {
 }
 
 async function uploadMedia(namespacePath, file, overwrite) {
-  const doFetch = window.__gowikiAuthFetch || fetch
+  const doFetch = window.__sargonAuthFetch || fetch
   const form = new FormData()
   form.append("file", file)
   form.append("overwrite", overwrite ? "true" : "false")
@@ -56,7 +56,7 @@ async function uploadMedia(namespacePath, file, overwrite) {
 }
 
 async function deleteMedia(mediaPath) {
-  const doFetch = window.__gowikiAuthFetch || fetch
+  const doFetch = window.__sargonAuthFetch || fetch
   const encoded = encodePath(mediaPath)
   const resp = await doFetch(`/api/media/${encoded}`, {
     method: "DELETE",
@@ -164,10 +164,10 @@ export function openMediaManager(initialNamespacePath, onStatus, onInsert) {
       const data = await listMedia(state.namespacePath)
       const allEntries = data.entries ?? []
       // Update global media version cache for property panel dropdowns.
-      if (window.__gowikiUpdateMediaVersionCache) {
+      if (window.__sargonUpdateMediaVersionCache) {
         for (const entry of allEntries) {
           if (entry.kind === "file" && entry.version > 0) {
-            window.__gowikiUpdateMediaVersionCache(entry.path, entry.version)
+            window.__sargonUpdateMediaVersionCache(entry.path, entry.version)
           }
         }
       }

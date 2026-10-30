@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // dbTestPool mirrors database.newTestPool for the api package: creates a

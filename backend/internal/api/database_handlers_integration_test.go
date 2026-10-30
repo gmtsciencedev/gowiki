@@ -15,8 +15,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/storage"
 )
 
 // ─── Minimal test doubles ────────────────────────────────

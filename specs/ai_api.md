@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The AI Content API allows external AI assistants (ChatGPT, Claude, Copilot, local LLMs, etc.) to interact with Gowiki on behalf of a user. The AI authenticates as the user via a personal API token and is bound by the same ACL rules, reviewflow constraints, and audit trail as any browser session.
+The AI Content API allows external AI assistants (ChatGPT, Claude, Copilot, local LLMs, etc.) to interact with Sargon on behalf of a user. The AI authenticates as the user via a personal API token and is bound by the same ACL rules, reviewflow constraints, and audit trail as any browser session.
 
 ### Design Goals
 
@@ -19,7 +19,7 @@ The AI Content API allows external AI assistants (ChatGPT, Claude, Copilot, loca
 - No admin operations (user management, ACL, config, database schema)
 - No direct media binary upload (use the existing `POST /api/media` endpoint with the same token)
 - No real-time collaboration (SSE/WebSocket) — the AI works in request/response mode
-- No AI provider integration on the server side — Gowiki is the content layer, not the AI layer
+- No AI provider integration on the server side — Sargon is the content layer, not the AI layer
 
 ---
 
@@ -403,7 +403,7 @@ The schema is embedded in the Go binary at compile time — it always matches th
 AI clients should set a descriptive `User-Agent` header:
 
 ```
-User-Agent: claude-code/1.0 (gowiki-ai-api; user=raynald.delahondes)
+User-Agent: claude-code/1.0 (sargon-ai-api; user=raynald.delahondes)
 ```
 
 This aids debugging and audit. Not enforced, but recommended.

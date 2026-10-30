@@ -3,7 +3,7 @@ package reviewflow
 import (
 	"testing"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // User-reported bug: a page was moved and then edited through MCP; the

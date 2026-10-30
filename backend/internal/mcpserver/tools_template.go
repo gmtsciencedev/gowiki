@@ -20,7 +20,7 @@ import (
 func registerCreatePageFromTemplateTool(srv *mcpsrv.MCPServer, deps Deps) {
 	tool := mcpgo.NewTool("create_page_from_template",
 		mcpgo.WithDescription(
-			"Create a new page from a Gowiki template. The template must carry a "+
+			"Create a new page from a Sargon template. The template must carry a "+
 				"{template} directive and, if it declares a reviewflow, be fully "+
 				"validated; otherwise the tool refuses (a document must not carry "+
 				"the version of a form still under review).\n\n"+

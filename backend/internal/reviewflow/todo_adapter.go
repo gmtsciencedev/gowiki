@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/todo"
+	"sargon/backend/internal/todo"
 )
 
 // TodoAdapter implements TodoIntegrator using the todo plugin's service.

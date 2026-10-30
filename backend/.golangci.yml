@@ -1,4 +1,4 @@
-# golangci-lint config for the Gowiki backend.
+# golangci-lint config for the Sargon backend.
 #
 # Only linters whose findings are already zero on the codebase are enabled.
 # Growing the set is a two-step commit: fix the outstanding findings, then

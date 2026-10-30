@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 type movePageRequest struct {

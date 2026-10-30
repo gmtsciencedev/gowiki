@@ -120,7 +120,7 @@ Derived from site configuration (`/api/site/info`).
 | Variable | Description | Example value |
 |---|---|---|
 | `{{WIKI}}` | Wiki title as configured in `site.title` | `Acme Corp Wiki` |
-| `{{WIKIVERSION}}` | Gowiki software version string | `0.4.0` |
+| `{{WIKIVERSION}}` | Sargon software version string | `0.4.0` |
 
 ---
 
@@ -259,10 +259,10 @@ Renders as: */docs/setup / **install***
 ### Wiki branding
 
 ```markdown
-Powered by {{WIKI}} — Gowiki {{WIKIVERSION}}
+Powered by {{WIKI}} — Sargon {{WIKIVERSION}}
 ```
 
-Renders as: *Powered by Acme Corp Wiki — Gowiki 0.4.0*
+Renders as: *Powered by Acme Corp Wiki — Sargon 0.4.0*
 
 ### Fallback values
 
@@ -296,12 +296,12 @@ Renders as: *Page created by* **ERR: \{\{AUHTOR\}\}** (yellow chip — typo dete
 
 5. **No new node type** — Global variables reuse the existing `template_var` inline node. The only change is in the NodeView resolution logic. This avoids schema changes, parser changes, and serializer changes.
 
-6. **No current-user variables** — Dokuwiki's `@USER@`, `@NAME@`, `@MAIL@`, `@ALIAS@` return the currently logged-in user. This made sense for template-based page creation (stamp the creator at creation time). In Gowiki's runtime-replacement model, these would show a different value to every reader, which is rarely useful ("Hello {{NAME}}" is awkward). Instead, author variables (`AUTHOR`/`LASTAUTHOR`) answer the meaningful questions: "who created this page?" and "who last edited it?" Current-user variables can be added later if a concrete use case emerges.
+6. **No current-user variables** — Dokuwiki's `@USER@`, `@NAME@`, `@MAIL@`, `@ALIAS@` return the currently logged-in user. This made sense for template-based page creation (stamp the creator at creation time). In Sargon's runtime-replacement model, these would show a different value to every reader, which is rarely useful ("Hello {{NAME}}" is awkward). Instead, author variables (`AUTHOR`/`LASTAUTHOR`) answer the meaningful questions: "who created this page?" and "who last edited it?" Current-user variables can be added later if a concrete use case emerges.
 
 7. **AUTHOR vs LASTAUTHOR** — Two distinct author identities mapped to the page's lifecycle. AUTHOR is the creator (version 1 author) — the page's "owner." LASTAUTHOR is the current version's author — the last editor. Both have NAME and MAIL variants resolved via the user display API. This requires a small backend addition: storing `created_by` in page metadata.
 
 8. **Consistent naming** — Dokuwiki's `@NS@`/`@NSL@`/`@PAGEL@` are inconsistently named. Renamed to `PATH` (namespace path), `EXTPATH` (external URL to namespace), `EXTID` (external URL to page) for clarity. The `EXT` prefix consistently means "full external URL."
 
-9. **Paths include leading slash** — All path variables (`ID`, `PATH`, `EXTID`, `EXTPATH`) include the leading `/`, consistent with Gowiki's path convention where paths always start with `/`.
+9. **Paths include leading slash** — All path variables (`ID`, `PATH`, `EXTID`, `EXTPATH`) include the leading `/`, consistent with Sargon's path convention where paths always start with `/`.
 
 10. **Dropped from Dokuwiki** — `@ALIAS_@`/`@ALIAS-@` (custom separator variants), `@VERR@`/`@VERN@` (mapped to clearer names `VERSIONDATE`/`VERSIONTAG`).

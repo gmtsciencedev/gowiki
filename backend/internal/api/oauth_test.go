@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // The oauth.go client-side handlers are painful to exercise end-to-end

@@ -15,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// ImportAuth imports DokuWiki users and ACL rules into Gowiki's JSON format.
+// ImportAuth imports DokuWiki users and ACL rules into Sargon's JSON format.
 // It looks for conf/users.auth.php and conf/acl.auth.php under opts.SrcDir.
 // Output: users.json, groups.json, acl.json under opts.DestDir/meta/.
 func ImportAuth(opts Options) error {
@@ -36,7 +36,7 @@ func ImportAuth(opts Options) error {
 	log.Printf("Importing auth data from %s", confDir)
 
 	// Parse users and collect groups.
-	var users []gowikiUser
+	var users []sargonUser
 	groupSet := map[string]bool{"admin": true, "editors": true} // always present
 
 	if usersExist {
@@ -54,7 +54,7 @@ func ImportAuth(opts Options) error {
 	}
 
 	// Parse ACL rules.
-	var rules []gowikiACLRule
+	var rules []sargonACLRule
 	if aclExists {
 		var err error
 		rules, err = parseDokuWikiACL(aclFile)
@@ -71,7 +71,7 @@ func ImportAuth(opts Options) error {
 	}
 
 	// Build groups list.
-	var groups []gowikiGroup
+	var groups []sargonGroup
 	for name := range groupSet {
 		desc := ""
 		switch name {
@@ -80,7 +80,7 @@ func ImportAuth(opts Options) error {
 		case "editors":
 			desc = "Can edit all pages"
 		}
-		groups = append(groups, gowikiGroup{Name: name, Description: desc})
+		groups = append(groups, sargonGroup{Name: name, Description: desc})
 	}
 
 	// Fallback admin: create admin/admin user with full permissions.
@@ -90,7 +90,7 @@ func ImportAuth(opts Options) error {
 			return fmt.Errorf("hash fallback admin password: %w", err)
 		}
 		now := time.Now().UTC().Format(time.RFC3339)
-		users = append(users, gowikiUser{
+		users = append(users, sargonUser{
 			Username:     "admin",
 			PasswordHash: string(hash),
 			Email:        "",
@@ -99,7 +99,7 @@ func ImportAuth(opts Options) error {
 			Disabled:     false,
 			CreatedAt:    now,
 		})
-		rules = append(rules, gowikiACLRule{
+		rules = append(rules, sargonACLRule{
 			Pattern:     ".*",
 			SubjectType: "group",
 			Subject:     "admin",
@@ -116,7 +116,7 @@ func ImportAuth(opts Options) error {
 			case "editors":
 				desc = "Can edit all pages"
 			}
-			groups = append(groups, gowikiGroup{Name: name, Description: desc})
+			groups = append(groups, sargonGroup{Name: name, Description: desc})
 		}
 		log.Printf("  Created fallback admin/admin account with full permissions")
 	}
@@ -155,9 +155,9 @@ func ImportAuth(opts Options) error {
 	return nil
 }
 
-// ---- Gowiki JSON types (mirror auth package, but without store logic) ----
+// ---- Sargon JSON types (mirror auth package, but without store logic) ----
 
-type gowikiUser struct {
+type sargonUser struct {
 	Username     string   `json:"username"`
 	PasswordHash string   `json:"password_hash"`
 	Email        string   `json:"email"`
@@ -167,12 +167,12 @@ type gowikiUser struct {
 	CreatedAt    string   `json:"created_at"`
 }
 
-type gowikiGroup struct {
+type sargonGroup struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type gowikiACLRule struct {
+type sargonACLRule struct {
 	Pattern     string   `json:"pattern"`
 	SubjectType string   `json:"subject_type"`
 	Subject     string   `json:"subject"`
@@ -184,7 +184,7 @@ type gowikiACLRule struct {
 // parseDokuWikiUsers parses conf/users.auth.php.
 // Format: login:hash:Real Name:email:group1,group2
 // Bcrypt hashes ($2y$) are converted to Go-compatible $2a$ prefix.
-func parseDokuWikiUsers(path string) ([]gowikiUser, error) {
+func parseDokuWikiUsers(path string) ([]sargonUser, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -192,7 +192,7 @@ func parseDokuWikiUsers(path string) ([]gowikiUser, error) {
 	defer f.Close()
 
 	now := time.Now().UTC().Format(time.RFC3339)
-	var users []gowikiUser
+	var users []sargonUser
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -223,7 +223,7 @@ func parseDokuWikiUsers(path string) ([]gowikiUser, error) {
 			groups = []string{}
 		}
 
-		users = append(users, gowikiUser{
+		users = append(users, sargonUser{
 			Username:     login,
 			PasswordHash: hash,
 			Email:        email,
@@ -266,8 +266,8 @@ const (
 	dokuPermDelete = 16
 )
 
-// dokuPermToGowiki maps a DokuWiki numeric permission level to Gowiki permissions.
-func dokuPermToGowiki(level int) []string {
+// dokuPermToSargon maps a DokuWiki numeric permission level to Sargon permissions.
+func dokuPermToSargon(level int) []string {
 	if level <= 0 {
 		return []string{}
 	}
@@ -285,14 +285,14 @@ func dokuPermToGowiki(level int) []string {
 
 // parseDokuWikiACL parses conf/acl.auth.php.
 // Format: path\t@group_or_user\tpermission_level
-func parseDokuWikiACL(path string) ([]gowikiACLRule, error) {
+func parseDokuWikiACL(path string) ([]sargonACLRule, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
-	var rules []gowikiACLRule
+	var rules []sargonACLRule
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -325,7 +325,7 @@ func parseDokuWikiACL(path string) ([]gowikiACLRule, error) {
 		// But preserve %USER% — it must not be URL-decoded.
 		if isUserTemplate {
 			// Temporarily replace %USER% to protect it from URL decoding,
-			// then convert to Gowiki's @self placeholder.
+			// then convert to Sargon's @self placeholder.
 			dokuPath = strings.ReplaceAll(dokuPath, "%USER%", "\x00USER\x00")
 			dokuPath = dokuURLDecode(dokuPath)
 			dokuPath = strings.ReplaceAll(dokuPath, "\x00USER\x00", "@self")
@@ -335,7 +335,7 @@ func parseDokuWikiACL(path string) ([]gowikiACLRule, error) {
 			subject = dokuURLDecode(subject)
 		}
 
-		// Convert DokuWiki path to Gowiki regex pattern.
+		// Convert DokuWiki path to Sargon regex pattern.
 		pattern := dokuACLPathToPattern(dokuPath)
 
 		// Determine subject type and name.
@@ -356,9 +356,9 @@ func parseDokuWikiACL(path string) ([]gowikiACLRule, error) {
 			subjectName = subject
 		}
 
-		permissions := dokuPermToGowiki(level)
+		permissions := dokuPermToSargon(level)
 
-		rules = append(rules, gowikiACLRule{
+		rules = append(rules, sargonACLRule{
 			Pattern:     pattern,
 			SubjectType: subjectType,
 			Subject:     subjectName,
@@ -382,7 +382,7 @@ func dokuURLDecode(s string) string {
 	return decoded
 }
 
-// dokuACLPathToPattern converts a DokuWiki ACL path to a Gowiki regex pattern.
+// dokuACLPathToPattern converts a DokuWiki ACL path to a Sargon regex pattern.
 //
 // DokuWiki uses colon as namespace separator:
 //

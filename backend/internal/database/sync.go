@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/markdown"
+	"sargon/backend/internal/markdown"
 )
 
 // DatabaseSync handles synchronization between page content and database rows.

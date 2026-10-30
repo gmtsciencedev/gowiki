@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // atticVersion represents a single DokuWiki attic entry (one version of one page).
@@ -38,7 +38,7 @@ type pageHistory struct {
 var reAtticFile = regexp.MustCompile(`^(.+)\.(\d+)\.txt\.gz$`)
 
 // ImportAttic reads the DokuWiki attic directory, converts each version,
-// and writes into the Gowiki attic under destDir.
+// and writes into the Sargon attic under destDir.
 // It also updates page metadata to reflect the correct version count.
 func ImportAttic(opts Options) error {
 	dataDir := opts.SrcDataDir()
@@ -128,8 +128,8 @@ func ImportAttic(opts Options) error {
 	// so we can replace them with the proper DokuWiki history.
 	if !opts.DryRun {
 		for pageID := range histories {
-			gowikiPagePath := dokuPageIDToGowikiPath(pageID)
-			dir := filepath.Join(destAtticDir, filepath.FromSlash(gowikiPagePath))
+			sargonPagePath := dokuPageIDToSargonPath(pageID)
+			dir := filepath.Join(destAtticDir, filepath.FromSlash(sargonPagePath))
 			if _, err := os.Stat(dir); err == nil {
 				os.RemoveAll(dir)
 			}
@@ -146,8 +146,8 @@ func ImportAttic(opts Options) error {
 			continue
 		}
 
-		// Determine the Gowiki page path.
-		gowikiPagePath := dokuPageIDToGowikiPath(pageID)
+		// Determine the Sargon page path.
+		sargonPagePath := dokuPageIDToSargonPath(pageID)
 
 		// Source relPath for conversion (used to derive namespace context).
 		srcRelPath := pageID + ".txt"
@@ -164,21 +164,21 @@ func ImportAttic(opts Options) error {
 				continue
 			}
 
-			// Convert DokuWiki content to Gowiki markdown.
+			// Convert DokuWiki content to Sargon markdown.
 			result := ConvertPage(string(content), srcRelPath, pagesDir)
 			markdown := result.Markdown
 
-			// Write to Gowiki attic.
+			// Write to Sargon attic.
 			author := v.Author
 			if author == "" {
 				author = "unknown"
 			}
 			ts := time.Unix(v.Timestamp, 0).UTC()
 
-			err = writeAtticVersion(destAtticDir, gowikiPagePath, versionNum, []byte(markdown), author, v.Summary, ts)
+			err = writeAtticVersion(destAtticDir, sargonPagePath, versionNum, []byte(markdown), author, v.Summary, ts)
 			if err != nil {
 				if opts.Verbose {
-					log.Printf("  error writing attic %s v%d: %v", gowikiPagePath, versionNum, err)
+					log.Printf("  error writing attic %s v%d: %v", sargonPagePath, versionNum, err)
 				}
 				continue
 			}
@@ -187,24 +187,24 @@ func ImportAttic(opts Options) error {
 
 		// Archive the current page content as the latest version.
 		newVersion := int64(len(h.Versions)) + 1
-		currentContent := readCurrentPageContent(opts.DestDir, gowikiPagePath)
+		currentContent := readCurrentPageContent(opts.DestDir, sargonPagePath)
 		if currentContent != nil {
 			// Use the last changelog entry's author, or fall back to metadata.
 			lastAuthor := "system"
 			if len(h.Versions) > 0 && h.Versions[len(h.Versions)-1].Author != "" {
 				lastAuthor = h.Versions[len(h.Versions)-1].Author
 			}
-			writeAtticVersion(destAtticDir, gowikiPagePath, newVersion, currentContent, lastAuthor, "imported current version", time.Now().UTC())
+			writeAtticVersion(destAtticDir, sargonPagePath, newVersion, currentContent, lastAuthor, "imported current version", time.Now().UTC())
 			totalVersions++
 		}
 
 		// Update page metadata version to match.
-		updatePageMetaVersion(destMetaDir, gowikiPagePath, newVersion)
+		updatePageMetaVersion(destMetaDir, sargonPagePath, newVersion)
 
 		totalPages++
 
 		if opts.Verbose {
-			log.Printf("  %s: %d versions imported", gowikiPagePath, len(h.Versions))
+			log.Printf("  %s: %d versions imported", sargonPagePath, len(h.Versions))
 		}
 	}
 
@@ -264,12 +264,12 @@ func loadChangelogs(metaDir string) map[string]map[int64]changelogEntry {
 	return result
 }
 
-// dokuPageIDToGowikiPath converts a DokuWiki page ID to a Gowiki page path.
+// dokuPageIDToSargonPath converts a DokuWiki page ID to a Sargon page path.
 // e.g. "pipeline/profile" -> "/pipeline/profile"
 //
 //	"start" -> "/"
 //	"ns/start" -> "/ns"
-func dokuPageIDToGowikiPath(pageID string) string {
+func dokuPageIDToSargonPath(pageID string) string {
 	// Replace start with index equivalent
 	parts := strings.Split(pageID, "/")
 	if parts[len(parts)-1] == "start" {
@@ -298,7 +298,7 @@ func readGzipFile(path string) ([]byte, error) {
 	return io.ReadAll(gz)
 }
 
-// writeAtticVersion writes a single version to the Gowiki attic.
+// writeAtticVersion writes a single version to the Sargon attic.
 // It creates the gzipped content file and updates the index.json.
 func writeAtticVersion(atticRoot, pagePath string, version int64, content []byte, author, summary string, timestamp time.Time) error {
 	dir := filepath.Join(atticRoot, filepath.FromSlash(pagePath))
@@ -362,7 +362,7 @@ func writeAtticVersion(atticRoot, pagePath string, version int64, content []byte
 	return os.WriteFile(indexPath, data, 0644)
 }
 
-// atticIndexEntry matches the Gowiki AtticEntry format.
+// atticIndexEntry matches the Sargon AtticEntry format.
 type atticIndexEntry struct {
 	Version   int64            `json:"version"`
 	Timestamp string           `json:"timestamp"`

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // newACLTestServer wires just the ACL store — the two handlers touch

@@ -1,6 +1,6 @@
 # Templates
 
-Three kinds of templates in Gowiki. They share the same `{template-*}` directive family and the same variable resolver, but they differ in how a new page gets *attached* to the template:
+Three kinds of templates in Sargon. They share the same `{template-*}` directive family and the same variable resolver, but they differ in how a new page gets *attached* to the template:
 
 - **Implicit templates** — files named `_template*.md`. Picked up by filename convention when a new page is created in the namespace. No action required on the user's part.
 - **Explicit templates** — any page carrying a `{template}` directive. Surfaced by a **Create document** button rendered on the template itself. The user clicks the button, names the destination, and the wiki copies the resolved payload into a new page.
@@ -163,7 +163,7 @@ A fallback value can be specified with a colon: `{{AUTHORMAIL:no email provided}
 | Variable | Description | Example |
 | --- | --- | --- |
 | `{{WIKI}}` | Site title | `Acme Wiki` |
-| `{{WIKIVERSION}}` | Gowiki software version | `0.9.5` |
+| `{{WIKIVERSION}}` | Sargon software version | `0.9.5` |
 
 ### 1. Database-bound variables
 

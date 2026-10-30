@@ -7,7 +7,7 @@ import (
 )
 
 // Table conversion: DokuWiki tables use ^ for header cells and | for data cells.
-// Gowiki uses standard pipe tables with a --- separator row.
+// Sargon uses standard pipe tables with a --- separator row.
 
 var (
 	// Table formula: ~~=formula~~
@@ -23,7 +23,7 @@ var (
 	reWrapInCell = regexp.MustCompile(`(?i)</?WRAP[^>]*>`)
 )
 
-// ConvertTable converts a group of DokuWiki table lines to Gowiki Markdown.
+// ConvertTable converts a group of DokuWiki table lines to Sargon Markdown.
 func ConvertTable(lines []string, currentNS string) ([]string, []FlaggedLine) {
 	if len(lines) == 0 {
 		return nil, nil
@@ -96,7 +96,7 @@ func ConvertTable(lines []string, currentNS string) ([]string, []FlaggedLine) {
 	}
 
 	// If no header row was detected, we need a separator after the first data row.
-	// In Gowiki pipe tables, a separator is mandatory.
+	// In Sargon pipe tables, a separator is mandatory.
 	if headerRow < 0 {
 		sep := "|"
 		for j := 0; j < maxCols; j++ {
@@ -269,7 +269,7 @@ func splitTableRow(line string) ([]string, []byte) {
 	return parts, delimiters
 }
 
-// renderTableRow renders cells as a Gowiki pipe table row.
+// renderTableRow renders cells as a Sargon pipe table row.
 func renderTableRow(cells []tableCell, maxCols int) string {
 	var b strings.Builder
 	b.WriteByte('|')
@@ -310,7 +310,7 @@ func isAllHeader(cells []tableCell) bool {
 	return true
 }
 
-// convertFormula converts a DokuWiki table formula to Gowiki syntax.
+// convertFormula converts a DokuWiki table formula to Sargon syntax.
 // DokuWiki: ~~=sum(range(col(),1,col(),row()-1))~~ -> =SUM(ABOVE)
 // Complex formulas are flagged.
 func convertFormula(formula string) string {

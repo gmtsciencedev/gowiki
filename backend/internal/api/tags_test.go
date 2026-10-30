@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/storage"
 )
 
 // The handler is small and DB-free — it composes tagIndex + PageStore +

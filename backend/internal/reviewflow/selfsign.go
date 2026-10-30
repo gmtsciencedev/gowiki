@@ -76,7 +76,7 @@ func handleSelfSign(svc *Service, extractUsername func(*http.Request) string) ht
 			SerialNumber: serialNumber,
 			Subject: pkix.Name{
 				CommonName:   username,
-				Organization: []string{"Gowiki Self-Signed"},
+				Organization: []string{"Sargon Self-Signed"},
 			},
 			NotBefore:             time.Now().Add(-time.Hour),
 			NotAfter:              time.Now().Add(365 * 24 * time.Hour),
@@ -111,7 +111,7 @@ func handleSelfSign(svc *Service, extractUsername func(*http.Request) string) ht
 		writeJSON(w, http.StatusOK, map[string]any{
 			"certificate_pem": certPEM,
 			"fingerprint":     fp,
-			"subject":         fmt.Sprintf("CN=%s,O=Gowiki Self-Signed", username),
+			"subject":         fmt.Sprintf("CN=%s,O=Sargon Self-Signed", username),
 			"not_after":       template.NotAfter.Format(time.RFC3339),
 		})
 	}

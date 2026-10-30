@@ -129,7 +129,7 @@ let pageNamespace = urlIsNamespaceIndex
     ? pagePath.split("/").slice(0, -1).join("/")
     : ""
 const defaultMarkdown = `
-## Gowiki
+## Sargon
 
 This is editable text.
 
@@ -151,10 +151,10 @@ let currentPageVersion = 0
 let currentPageMeta = null // full meta object from API: { version, author, created_by, updated_at, ... }
 
 // Global media version cache: maps relative media paths (as in node attrs) to their max version.
-window.__gowikiMediaVersions = new Map()
-window.__gowikiUpdateMediaVersionCache = function (absPath, version) {
+window.__sargonMediaVersions = new Map()
+window.__sargonUpdateMediaVersionCache = function (absPath, version) {
   const relPath = buildMediaReferencePath(pageNamespace, absPath)
-  window.__gowikiMediaVersions.set(relPath, version)
+  window.__sargonMediaVersions.set(relPath, version)
 }
 let stashedEditorState = null // ProseMirror EditorState preserved across draft exit/resume
 let historyLatestVersion = null // latest version number from history listing
@@ -174,7 +174,7 @@ let statusText = ""
 let isNewPage = false
 let hasTemplate = false
 let isNamespaceIndex = false
-let siteTitle = "Gowiki"
+let siteTitle = "Sargon"
 let siteVersion = ""
 let tocMaxLevel = 3
 let viewView = null
@@ -943,7 +943,7 @@ const imageBgCache = new Map()
 
 function applyImageAutoFrame(img) {
   // Skip if the admin disabled the heuristic.
-  const info = (window.__gowikiSiteInfo && window.__gowikiSiteInfo.theme) || null
+  const info = (window.__sargonSiteInfo && window.__sargonSiteInfo.theme) || null
   if (info && info.image_auto_frame === false) return
   // Skip if the author has an explicit choice.
   if (img.dataset.bg) return
@@ -1003,7 +1003,7 @@ function scanImagesForAutoFrame(root) {
 // attributes change (e.g. user toggles bg from "light" back to "auto"
 // via the property panel).
 if (typeof window !== "undefined") {
-  window.__gowikiAutoFrameImage = applyImageAutoFrame
+  window.__sargonAutoFrameImage = applyImageAutoFrame
 }
 
 // Re-scan after theme change (light → dark activates framing).
@@ -1084,7 +1084,7 @@ async function setThemePreference(pref) {
     /* ignore */
   }
   const adminDefault =
-    (window.__gowikiSiteInfo && window.__gowikiSiteInfo.theme && window.__gowikiSiteInfo.theme.default) || "auto"
+    (window.__sargonSiteInfo && window.__sargonSiteInfo.theme && window.__sargonSiteInfo.theme.default) || "auto"
   applyTheme(resolveTheme(pref, adminDefault))
   if (currentUser) {
     try {
@@ -1105,7 +1105,7 @@ try {
     const pref = currentUserThemePref || localStorage.getItem("gowiki-theme") || "auto"
     if (pref === "auto" || !pref) {
       const adminDefault =
-        (window.__gowikiSiteInfo && window.__gowikiSiteInfo.theme && window.__gowikiSiteInfo.theme.default) || "auto"
+        (window.__sargonSiteInfo && window.__sargonSiteInfo.theme && window.__sargonSiteInfo.theme.default) || "auto"
       applyTheme(resolveTheme(pref, adminDefault))
     }
   })
@@ -1330,7 +1330,7 @@ function insertMediaReference(kind, mediaEntry) {
 
   // Update media version cache so the property panel dropdown knows the max version.
   if (mediaEntry.version > 0) {
-    window.__gowikiMediaVersions.set(basePath, mediaEntry.version)
+    window.__sargonMediaVersions.set(basePath, mediaEntry.version)
   }
   const state = editorView.state
   const tr = state.tr
@@ -1530,7 +1530,7 @@ async function handleImageFilePaste(view, imageFiles) {
       const version = entry.version && entry.version > 1 ? String(entry.version) : null
       const label = mediaLabelFromPath(entry.path)
       if (entry.version > 0) {
-        window.__gowikiMediaVersions.set(basePath, entry.version)
+        window.__sargonMediaVersions.set(basePath, entry.version)
       }
 
       const imageNode = schema.nodes.image.create({
@@ -1876,7 +1876,7 @@ function applyNormalizedEditState(normalized) {
 let statusToastEl = null
 let statusToastTimer = null
 
-window.__gowikiSetStatus = function (text, isError) {
+window.__sargonSetStatus = function (text, isError) {
   setStatus(text, isError)
 }
 
@@ -7647,7 +7647,7 @@ let inHistoryView = false // true when showing history/version/diff
 function enterHistoryView() {
   if (!inHistoryView) {
     // Push a state so the browser back button returns to the page.
-    window.history.pushState({ gowikiHistory: true }, "", window.location.href)
+    window.history.pushState({ sargonHistory: true }, "", window.location.href)
     inHistoryView = true
   }
 }
@@ -8229,9 +8229,9 @@ async function viewVersion(version) {
 
     const content = document.createElement("div")
     content.className = "gowiki-version-content"
-    window.__gowikiViewingVersion = version
+    window.__sargonViewingVersion = version
     mountReadOnlyView(content, data.markdown, "gowiki-view")
-    window.__gowikiViewingVersion = null
+    window.__sargonViewingVersion = null
     rewriteMediaToVersioned(content, data.media_refs)
 
     const actions = document.createElement("div")
@@ -8614,7 +8614,7 @@ async function resolveSiteInfo() {
     const resp = await fetch("/api/site/info")
     if (resp.ok) {
       const data = await resp.json()
-      window.__gowikiSiteInfo = data
+      window.__sargonSiteInfo = data
       if (data.title) {
         siteTitle = data.title
         document.getElementById("banner-title").textContent = siteTitle
@@ -8887,7 +8887,7 @@ async function checkAuth() {
   } catch {
     currentUser = null
   }
-  window.__gowikiCurrentUser = currentUser
+  window.__sargonCurrentUser = currentUser
 
   // Load the user's persisted theme preference and apply it. The
   // no-flash boot script already painted something reasonable; this
@@ -8928,7 +8928,7 @@ async function checkAuth() {
           }
         }
         const adminDefault =
-          (window.__gowikiSiteInfo && window.__gowikiSiteInfo.theme && window.__gowikiSiteInfo.theme.default) || "auto"
+          (window.__sargonSiteInfo && window.__sargonSiteInfo.theme && window.__sargonSiteInfo.theme.default) || "auto"
         applyTheme(resolveTheme(currentUserThemePref, adminDefault))
       }
     } catch {
@@ -9090,7 +9090,7 @@ function renderBannerUser() {
       dropdown.style.display = "none"
       await fetch("/api/auth/logout", { method: "POST" })
       currentUser = null
-      window.__gowikiCurrentUser = null
+      window.__sargonCurrentUser = null
       pageLockInfo = null
       editToken = null
       stashedEditorState = null
@@ -9581,12 +9581,12 @@ async function authFetch(url, options) {
   return resp
 }
 // Expose for media_manager.js
-window.__gowikiAuthFetch = authFetch
-window.__gowikiCurrentUser = null
-window.__gowikiCurrentMarkdown = () => currentMarkdown
+window.__sargonAuthFetch = authFetch
+window.__sargonCurrentUser = null
+window.__sargonCurrentMarkdown = () => currentMarkdown
 
 // Expose global variable context for the template_var resolver.
-window.__gowikiGlobalVarContext = () => ({
+window.__sargonGlobalVarContext = () => ({
   pagePath: "/" + pagePath,
   pageNamespace: pageNamespace ? "/" + pageNamespace : "/",
   pageName: pagePath.includes("/") ? pagePath.split("/").pop().replace(/_/g, " ") : pagePath.replace(/_/g, " "),
@@ -9630,7 +9630,7 @@ async function reloadPageContent() {
     // Populate media version cache from page response.
     if (page.media_versions) {
       for (const [absPath, ver] of Object.entries(page.media_versions)) {
-        window.__gowikiUpdateMediaVersionCache(absPath, ver)
+        window.__sargonUpdateMediaVersionCache(absPath, ver)
       }
     }
   } else {
@@ -10212,7 +10212,7 @@ async function discardDraft() {
       currentDoc = markdownToPM(currentMarkdown, registry)
       if (page.media_versions) {
         for (const [absPath, ver] of Object.entries(page.media_versions)) {
-          window.__gowikiUpdateMediaVersionCache(absPath, ver)
+          window.__sargonUpdateMediaVersionCache(absPath, ver)
         }
       }
     }
@@ -14092,7 +14092,7 @@ async function bootstrap() {
     // Populate media version cache so the property panel dropdown knows the max version.
     if (page.media_versions) {
       for (const [absPath, ver] of Object.entries(page.media_versions)) {
-        window.__gowikiUpdateMediaVersionCache(absPath, ver)
+        window.__sargonUpdateMediaVersionCache(absPath, ver)
       }
     }
   } else {

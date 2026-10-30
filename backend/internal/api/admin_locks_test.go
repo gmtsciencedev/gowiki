@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // locksStubDraftManager records what admin operations were called and

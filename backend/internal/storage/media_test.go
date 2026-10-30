@@ -75,7 +75,7 @@ func TestMediaFileStore_PutListResolve_RoundTrip(t *testing.T) {
 	}
 }
 
-// Attachments must carry an extension — matches the Gowiki invariant
+// Attachments must carry an extension — matches the Sargon invariant
 // documented in CLAUDE.md ("Do not create extension-less files under
 // data/content/").
 func TestMediaFileStore_Put_RefusesExtensionlessName(t *testing.T) {

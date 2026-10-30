@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Inline syntax conversion: DokuWiki inline markup -> Gowiki Markdown.
+// Inline syntax conversion: DokuWiki inline markup -> Sargon Markdown.
 // The approach: protect code spans and links first, then convert remaining inline syntax.
 
 var (
@@ -79,7 +79,7 @@ func (p *protector) restore(s string) string {
 	return s
 }
 
-// ConvertInline converts DokuWiki inline markup to Gowiki Markdown.
+// ConvertInline converts DokuWiki inline markup to Sargon Markdown.
 // context: "paragraph", "list", or "table" — affects line break handling.
 func ConvertInline(line string, currentNS string, context string) string {
 	prot := newProtector()
@@ -158,7 +158,7 @@ func ConvertInline(line string, currentNS string, context string) string {
 		line = reLineBreakMid.ReplaceAllString(line, `\n`)
 		line = reLineBreak.ReplaceAllString(line, `\n`)
 	} else {
-		// In paragraphs: \\ at end of line is a newline (handled by Gowiki's
+		// In paragraphs: \\ at end of line is a newline (handled by Sargon's
 		// "single newline = hard break" rule, so just remove the \\)
 		line = reLineBreakMid.ReplaceAllString(line, "\n")
 		line = reLineBreak.ReplaceAllString(line, "")
@@ -271,7 +271,7 @@ func convertItalic(line string) string {
 	return result.String()
 }
 
-// convertLink converts the content of a [[ ]] DokuWiki link to Gowiki Markdown.
+// convertLink converts the content of a [[ ]] DokuWiki link to Sargon Markdown.
 func convertLink(inner string, currentNS string) string {
 	// Split on | for text
 	parts := strings.SplitN(inner, "|", 2)
@@ -322,18 +322,18 @@ func convertLink(inner string, currentNS string) string {
 		target = target[:idx]
 	}
 
-	gowikiPath := DokuWikiLinkToPath(target, currentNS)
+	sargonPath := DokuWikiLinkToPath(target, currentNS)
 	if text == "" {
 		// Use last path segment as display text (like DokuWiki does)
-		base := path.Base(gowikiPath)
+		base := path.Base(sargonPath)
 		if base == "" || base == "." || base == "/" {
-			text = gowikiPath
+			text = sargonPath
 		} else {
 			text = base
 		}
 	}
 
-	return fmt.Sprintf("[%s](%s%s)", text, gowikiPath, anchor)
+	return fmt.Sprintf("[%s](%s%s)", text, sargonPath, anchor)
 }
 
 // convertMediaInline handles inline media references.

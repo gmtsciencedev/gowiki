@@ -1,9 +1,9 @@
-# Gowiki — Todo Plugin Specification
+# Sargon — Todo Plugin Specification
 
 
 ## 1. Overview
 
-The **Todo plugin** is a first-class task-management extension for Gowiki. It consolidates the functionality of several DokuWiki plugins (todo, bureaucracy, struct, and notification) into a single coherent system with a clean separation between a **Go backend API** and a **TypeScript frontend plugin**.
+The **Todo plugin** is a first-class task-management extension for Sargon. It consolidates the functionality of several DokuWiki plugins (todo, bureaucracy, struct, and notification) into a single coherent system with a clean separation between a **Go backend API** and a **TypeScript frontend plugin**.
 
 ### Design Goals
 
@@ -12,7 +12,7 @@ The **Todo plugin** is a first-class task-management extension for Gowiki. It co
 - Optionally bind a task to a wiki action (read, edit, create, or set meta on a page)
 - Expose a stable internal Go API so other plugins can create, query, or update tasks programmatically
 - Notify assignees via email and/or an outbound webhook (Zulip, Slack, or any compatible system)
-- **Requires PostgreSQL** — the plugin cannot be activated if the Gowiki instance has no PostgreSQL connection
+- **Requires PostgreSQL** — the plugin cannot be activated if the Sargon instance has no PostgreSQL connection
 
 ---
 
@@ -20,7 +20,7 @@ The **Todo plugin** is a first-class task-management extension for Gowiki. It co
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                   Gowiki Core                       │
+│                   Sargon Core                       │
 │                                                     │
 │  ┌──────────────────┐    ┌────────────────────────┐ │
 │  │  Go Backend API  │◄───│  Other Go Plugins       │ │
@@ -45,7 +45,7 @@ The **Todo plugin** is a first-class task-management extension for Gowiki. It co
 └─────────────────────────────────────────────────────┘
 ```
 
-The **Go backend** is intentionally **not** a plugin binary — it compiles into the core Gowiki binary and registers itself at startup so that it is always available as a dependency for other plugins. The **TS frontend** is a standard Gowiki plugin bundle.
+The **Go backend** is intentionally **not** a plugin binary — it compiles into the core Sargon binary and registers itself at startup so that it is always available as a dependency for other plugins. The **TS frontend** is a standard Sargon plugin bundle.
 
 At startup the plugin checks for a live PostgreSQL connection. If none is configured, the plugin logs a warning and stays inactive — no routes are registered, no TS assets are served.
 
@@ -207,13 +207,13 @@ Exactly one of the following shapes:
 }
 ```
 
-The wiki action is optional. When present, completing the action via the wiki UI automatically marks the task `done` through Gowiki core event hooks.
+The wiki action is optional. When present, completing the action via the wiki UI automatically marks the task `done` through Sargon core event hooks.
 
 ---
 
 ## 4. Wiki Syntax
 
-Tasks are declared as curly-brace block nodes, consistent with all other Gowiki block syntax.
+Tasks are declared as curly-brace block nodes, consistent with all other Sargon block syntax.
 
 **Multi-line form** (full options):
 
@@ -320,7 +320,7 @@ In visual mode, `{todo-list}` renders as a placeholder block ("Todo List" label 
 
 Base path: `/api/plugin/todo/v1`
 
-All endpoints require a valid Gowiki session cookie or Bearer token. Responses are JSON.
+All endpoints require a valid Sargon session cookie or Bearer token. Responses are JSON.
 
 ### 5.1 Endpoints
 
@@ -366,7 +366,7 @@ type Service interface {
     Subscribe(ctx context.Context, userID string) (<-chan Event, error)
 }
 
-// Registration (called once at Gowiki startup):
+// Registration (called once at Sargon startup):
 func Register(core gowiki.Core) {
     core.RegisterService("todo", NewService(core))
 }
@@ -384,7 +384,7 @@ svc := core.Service("todo").(todoplugin.Service)
 ```
 plugins/todo/
 ├── src/
-│   ├── index.ts            // plugin entry — registers with Gowiki TS core
+│   ├── index.ts            // plugin entry — registers with Sargon TS core
 │   ├── gate.ts             // TodoGate: typed fetch wrapper + SSE client
 │   ├── syntax.ts           // {todo …} and {todo-list …} nodes → DOM renderers
 │   ├── components/
@@ -448,7 +448,7 @@ Renders `{todo-list}` nodes. Unlike `TodoWidget` (which maps 1:1 to a backend ta
 
 ### 6.6 Editor Integration
 
-When the Gowiki page editor is open, the TS plugin registers toolbar buttons:
+When the Sargon page editor is open, the TS plugin registers toolbar buttons:
 - **Todo**: inserts a `{todo …}` block at the cursor and opens `TodoModal` to fill in details
 - **Todo List**: inserts a `{todo-list}` block with default filters and opens the properties panel
 
@@ -490,7 +490,7 @@ When the todo plugin is active, an additional **"Todo"** tab appears in the admi
 
 ### 7.1 Email
 
-The Go backend sends emails through Gowiki's existing SMTP configuration. Templates (Go `text/template` format) are stored in `plugins/todo/templates/`:
+The Go backend sends emails through Sargon's existing SMTP configuration. Templates (Go `text/template` format) are stored in `plugins/todo/templates/`:
 
 | Template | Trigger |
 |---|---|
@@ -588,7 +588,7 @@ Config example:
 
 ### 8.1 Struct / Meta Plugin
 
-When a `set_meta` wiki action completes (Gowiki fires a `page.meta.updated` event), the todo engine checks whether any open task has that action as its `wiki_action` and closes it automatically.
+When a `set_meta` wiki action completes (Sargon fires a `page.meta.updated` event), the todo engine checks whether any open task has that action as its `wiki_action` and closes it automatically.
 
 ### 8.2 Reviewflow Plugin
 
@@ -723,7 +723,7 @@ Tasks created programmatically via the Go Service API are **not** written to the
 
 ## 10. Decisions
 
-1. **Storage** — PostgreSQL only. The plugin refuses to activate if no PostgreSQL connection is available in the running Gowiki instance. No embedded fallback is provided.
+1. **Storage** — PostgreSQL only. The plugin refuses to activate if no PostgreSQL connection is available in the running Sargon instance. No embedded fallback is provided.
 
 2. **Recurrence model** — Two patterns: fixed delay in days (`3d`), and calendar repetition (`daily / weekly / Nmonths / yearly`). No cron expressions, no weekday selectors. Completing a recurring task immediately spawns the next instance.
 

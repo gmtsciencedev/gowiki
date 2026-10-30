@@ -25,7 +25,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 const sep = " | "

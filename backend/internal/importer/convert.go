@@ -22,7 +22,7 @@ const (
 	stateFold
 )
 
-// ConvertPage converts a full DokuWiki page to Gowiki Markdown.
+// ConvertPage converts a full DokuWiki page to Sargon Markdown.
 // pagePath is the source page path relative to pages/ (e.g. "ns/page.txt"),
 // used for resolving relative links.
 // pagesDir is the root pages/ directory, used to resolve include anchors.
@@ -435,7 +435,7 @@ func ConvertPage(content string, pagePath string, pagesDir string) *ConvertResul
 	output = ensureBlankLinesAroundDirectives(output)
 
 	// Post-process: collapse consecutive blank lines into one (DokuWiki ignores
-	// extra blank lines, but in Gowiki they produce hard line breaks).
+	// extra blank lines, but in Sargon they produce hard line breaks).
 	// Run on the joined string so embedded \n from line break conversion are handled.
 	joined := strings.Join(output, "\n")
 	result.Markdown = strings.Join(collapseBlankLines(strings.Split(joined, "\n")), "\n")

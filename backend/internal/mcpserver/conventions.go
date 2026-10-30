@@ -6,7 +6,7 @@ package mcpserver
 func conventionsPayload() map[string]any {
 	return map[string]any{
 		"dialect": map[string]any{
-			"name":        "Gowiki Markdown",
+			"name":        "Sargon Markdown",
 			"description": "A bijective Markdown dialect. One canonical syntax per node type. Round-trip lossless.",
 			"rules": []string{
 				"*italic* only — _italic_ is NOT italic, it is underline",

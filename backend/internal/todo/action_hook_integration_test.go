@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // End-to-end proof that the FileStore.OnPageSaved hook closes the

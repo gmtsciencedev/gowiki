@@ -7,7 +7,7 @@ BACKEND_BIN := backend/server
 # explicit values so tag builds record the tag commit even if HEAD has moved.
 GIT_COMMIT ?= $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 BUILD_DATE ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
-LDFLAGS := -X gowiki/backend/internal/api.BuildCommit=$(GIT_COMMIT) -X gowiki/backend/internal/api.BuildDate=$(BUILD_DATE)
+LDFLAGS := -X sargon/backend/internal/api.BuildCommit=$(GIT_COMMIT) -X sargon/backend/internal/api.BuildDate=$(BUILD_DATE)
 
 frontend-install:
 	npm --prefix frontend install

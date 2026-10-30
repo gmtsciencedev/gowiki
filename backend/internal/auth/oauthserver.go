@@ -1,6 +1,6 @@
 // OAuth 2.0 authorization server for the MCP endpoint.
 //
-// Gowiki acts as an OAuth 2.0 authorization server so that MCP clients
+// Sargon acts as an OAuth 2.0 authorization server so that MCP clients
 // (Claude.ai, Claude Desktop's "Add connector" UI, etc.) can register
 // themselves via RFC 7591 Dynamic Client Registration and obtain access
 // tokens via the standard authorization-code + PKCE flow.

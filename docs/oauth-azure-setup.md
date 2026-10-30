@@ -1,19 +1,19 @@
 # Microsoft 365 / Azure AD Authentication Setup
 
-This guide explains how to configure Gowiki to allow users to sign in with their Microsoft 365 (Azure AD / Entra ID) accounts.
+This guide explains how to configure Sargon to allow users to sign in with their Microsoft 365 (Azure AD / Entra ID) accounts.
 
 ## Prerequisites
 
 - A Microsoft 365 tenant (or Azure AD tenant)
 - An Azure account with permission to register applications (Global Administrator, Application Administrator, or Cloud Application Administrator)
-- A running Gowiki instance with admin access
+- A running Sargon instance with admin access
 
 ## Step 1: Register an Application in Azure Portal
 
 1. Go to [Azure Portal](https://portal.azure.com)
 2. Navigate to **Azure Active Directory** > **App registrations** > **New registration**
 3. Fill in:
-   - **Name**: `Gowiki` (or whatever you prefer)
+   - **Name**: `Sargon` (or whatever you prefer)
    - **Supported account types**: Choose based on your needs:
      - *Single tenant* — only users from your organization
      - *Multi-tenant* — users from any Azure AD organization
@@ -32,7 +32,7 @@ After registration, you'll see the app overview page. Note these values:
 ## Step 3: Create a Client Secret
 
 1. In the app registration, go to **Certificates & secrets** > **Client secrets** > **New client secret**
-2. Add a description (e.g., "Gowiki") and choose an expiry period
+2. Add a description (e.g., "Sargon") and choose an expiry period
 3. Click **Add**
 4. **Copy the Value immediately** (it won't be shown again). This is the `Client Secret`
    - Important: copy the **Value**, not the **Secret ID**
@@ -48,13 +48,13 @@ After registration, you'll see the app overview page. Note these values:
 4. Click **Add permissions**
 5. If you see "Admin consent required", click **Grant admin consent for [your org]**
 
-These are minimal, read-only permissions — Gowiki only needs to identify the user.
+These are minimal, read-only permissions — Sargon only needs to identify the user.
 
-## Step 5: Configure Gowiki
+## Step 5: Configure Sargon
 
 ### Option A: Via Admin UI
 
-1. Log into Gowiki as an admin
+1. Log into Sargon as an admin
 2. Go to the **Admin** page > **Configuration** tab
 3. In the **OAuth / Microsoft 365** section, fill in:
    - **Provider**: Azure AD / Microsoft 365
@@ -86,16 +86,16 @@ Restart the backend after editing the file.
 
 ## Step 6: Test
 
-1. Open Gowiki and click the **Login** link
+1. Open Sargon and click the **Login** link
 2. You should see a **"Sign in with Microsoft 365"** button above the username/password form
 3. Click it — you'll be redirected to Microsoft's login page
-4. After authenticating, you'll be redirected back to Gowiki
+4. After authenticating, you'll be redirected back to Sargon
 
 ## How User Mapping Works
 
-Gowiki uses **email** as the join key between local accounts and OAuth:
+Sargon uses **email** as the join key between local accounts and OAuth:
 
-- When a user logs in via Microsoft 365, Gowiki extracts their email from the ID token
+- When a user logs in via Microsoft 365, Sargon extracts their email from the ID token
 - It then looks up a local user with the same email (case-insensitive)
 - If found: the user gets a session as that local user (same username, groups, permissions)
 - If not found and **auto-create** is enabled: a new user is created with username derived from the email prefix and the configured default groups
@@ -113,7 +113,7 @@ You can register multiple redirect URIs in Azure Portal. Common setup:
 - `http://localhost:8080/api/auth/oauth/callback` — for development
 - `https://wiki.yourcompany.com/api/auth/oauth/callback` — for production
 
-Gowiki uses a relative callback path (`/api/auth/oauth/callback`), so it works regardless of the host. The OAuth library resolves it against the request's origin.
+Sargon uses a relative callback path (`/api/auth/oauth/callback`), so it works regardless of the host. The OAuth library resolves it against the request's origin.
 
 ## Troubleshooting
 
@@ -127,4 +127,4 @@ Gowiki uses a relative callback path (`/api/auth/oauth/callback`), so it works r
 
 **Azure returns AADSTS50011**: Same as above — redirect URI mismatch.
 
-**No email in token**: Ensure the `email` API permission is granted and admin consent is given. Some Azure configurations put the email in `preferred_username` or `upn` instead — Gowiki checks all three.
+**No email in token**: Ensure the `email` API permission is granted and admin consent is given. Some Azure configurations put the email in `preferred_username` or `upn` instead — Sargon checks all three.

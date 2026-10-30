@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // --- helpers ----------------------------------------------------------

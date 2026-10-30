@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/storage"
 )
 
 // PageReader provides read access to page content for bootstrapping state.

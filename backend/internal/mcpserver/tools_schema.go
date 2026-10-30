@@ -9,7 +9,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // isAdmin returns true when the caller's user is in the admin group.

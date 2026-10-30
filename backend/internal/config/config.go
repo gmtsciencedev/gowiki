@@ -252,7 +252,7 @@ func DefaultConfig() Config {
 			Addr: ":8080",
 		},
 		Site: SiteConfig{
-			Title:         "Gowiki",
+			Title:         "Sargon",
 			FooterPage:    "footer",
 			SidebarPage:   "sidebar",
 			TOCMaxLevel:   3,

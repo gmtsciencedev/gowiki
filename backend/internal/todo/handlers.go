@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // UsernameExtractor is a function that extracts the username from an HTTP request context.

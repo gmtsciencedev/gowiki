@@ -14,7 +14,7 @@ import (
 	"time"
 	"unicode"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // DokuWiki struct JSON schema
@@ -135,8 +135,8 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 	// Collect enabled columns.
 	type fieldMapping struct {
 		dwCol      DWColumn
-		gowikiName string
-		gowikiType string
+		sargonName string
+		sargonType string
 		enumValues []string
 		foreignKey string
 	}
@@ -153,8 +153,8 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 		}
 		fields = append(fields, fieldMapping{
 			dwCol:      col,
-			gowikiName: gName,
-			gowikiType: gType,
+			sargonName: gName,
+			sargonType: gType,
 			enumValues: enumVals,
 			foreignKey: fk,
 		})
@@ -167,13 +167,13 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 		}
 	}
 
-	// Tag table normalization: Gowiki expects tag tables to have fields named
+	// Tag table normalization: Sargon expects tag tables to have fields named
 	// "label", "icon", and "color". DokuWiki status tables often use different
 	// names (e.g., "name_en"). If a table has "icon" and "color" but no "label",
 	// rename the first text field to "label".
 	hasLabel, hasIcon, hasColor := false, false, false
 	for _, fm := range fields {
-		switch fm.gowikiName {
+		switch fm.sargonName {
 		case "label":
 			hasLabel = true
 		case "icon":
@@ -184,9 +184,9 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 	}
 	if hasIcon && hasColor && !hasLabel {
 		for i, fm := range fields {
-			if fm.gowikiType == "text" && fm.gowikiName != "icon" && fm.gowikiName != "color" {
-				log.Printf("  tag table normalization: renaming field %q → \"label\"", fm.gowikiName)
-				fields[i].gowikiName = "label"
+			if fm.sargonType == "text" && fm.sargonName != "icon" && fm.sargonName != "color" {
+				log.Printf("  tag table normalization: renaming field %q → \"label\"", fm.sargonName)
+				fields[i].sargonName = "label"
 				break
 			}
 		}
@@ -216,17 +216,17 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 		for i, fm := range fields {
 			f := &database.FieldDef{
 				TableID:      table.ID,
-				Name:         fm.gowikiName,
+				Name:         fm.sargonName,
 				Label:        fm.dwCol.Label,
-				Type:         fm.gowikiType,
+				Type:         fm.sargonType,
 				DisplayOrder: (i + 1) * 10,
 				ForeignKey:   fm.foreignKey,
 				EnumValues:   fm.enumValues,
 			}
 			if err := schemaStore.CreateField(ctx, f, "import"); err != nil {
-				return fmt.Errorf("create field %q: %w", fm.gowikiName, err)
+				return fmt.Errorf("create field %q: %w", fm.sargonName, err)
 			}
-			log.Printf("  created field %q (%s) id=%d", fm.gowikiName, fm.gowikiType, f.ID)
+			log.Printf("  created field %q (%s) id=%d", fm.sargonName, fm.sargonType, f.ID)
 		}
 	}
 
@@ -262,7 +262,7 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 		// Get page path from pid column.
 		pagePath := ""
 		if pidIdx, ok := headerIdx["pid"]; ok && pidIdx < len(record) {
-			pagePath = dokuPathToGowiki(record[pidIdx])
+			pagePath = dokuPathToSargon(record[pidIdx])
 		}
 
 		rowFields := make(map[string]any)
@@ -279,7 +279,7 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 			// convertCSVValue never returns a nil interface value, so
 			// the previous `if val != nil` guard was dead. Any raw that
 			// makes it past the empty check above becomes a stored field.
-			rowFields[fm.gowikiName] = convertCSVValue(raw, fm.gowikiType, fm.dwCol)
+			rowFields[fm.sargonName] = convertCSVValue(raw, fm.sargonType, fm.dwCol)
 		}
 
 		row := &database.Row{
@@ -297,8 +297,8 @@ func importTable(ctx context.Context, schemaStore *database.SchemaStore, dataSto
 	return nil
 }
 
-// mapFieldType converts DokuWiki struct class to Gowiki field type.
-func mapFieldType(col DWColumn) (gowikiType string, enumValues []string, foreignKey string) {
+// mapFieldType converts DokuWiki struct class to Sargon field type.
+func mapFieldType(col DWColumn) (sargonType string, enumValues []string, foreignKey string) {
 	switch col.Class {
 	case "Text", "LongText":
 		return "text", nil, ""
@@ -346,7 +346,7 @@ func convertCSVValue(raw string, fieldType string, _ DWColumn) any {
 	switch fieldType {
 	case "text", "color", "user", "page_link":
 		if fieldType == "page_link" {
-			return dokuPathToGowiki(raw)
+			return dokuPathToSargon(raw)
 		}
 		return raw
 	case "integer":
@@ -419,7 +419,7 @@ func convertCSVValue(raw string, fieldType string, _ DWColumn) any {
 	}
 }
 
-// sanitizeName converts a label to a valid Gowiki field/table name.
+// sanitizeName converts a label to a valid Sargon field/table name.
 var nonAlphaRe = regexp.MustCompile(`[^a-z0-9]+`)
 
 func sanitizeName(label string) string {
@@ -468,7 +468,7 @@ func transliterate(s string) string {
 	return b.String()
 }
 
-// Namespace renaming: DokuWiki ps0X → new Gowiki names.
+// Namespace renaming: DokuWiki ps0X → new Sargon names.
 var namespaceRenames = map[string]string{
 	"ps01": "dir",
 	"ps02": "qara",
@@ -479,8 +479,8 @@ var namespaceRenames = map[string]string{
 	"ps07": "res",
 }
 
-// dokuPathToGowiki converts a DokuWiki page path to Gowiki format.
-func dokuPathToGowiki(dokuPath string) string {
+// dokuPathToSargon converts a DokuWiki page path to Sargon format.
+func dokuPathToSargon(dokuPath string) string {
 	if dokuPath == "" {
 		return ""
 	}
@@ -488,7 +488,7 @@ func dokuPathToGowiki(dokuPath string) string {
 	if !strings.HasPrefix(p, "/") {
 		p = "/" + p
 	}
-	// DokuWiki "start" → Gowiki "index"
+	// DokuWiki "start" → Sargon "index"
 	if strings.HasSuffix(p, "/start") {
 		p = p[:len(p)-5] + "index"
 	}

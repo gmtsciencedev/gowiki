@@ -1,6 +1,6 @@
 # Charts
 
-Gowiki can render data charts directly in wiki pages using [Chart.js](https://www.chartjs.org/). Charts are authored as simple `name = value` pairs inside a fenced block.
+Sargon can render data charts directly in wiki pages using [Chart.js](https://www.chartjs.org/). Charts are authored as simple `name = value` pairs inside a fenced block.
 
 ## 1. Basic syntax
 

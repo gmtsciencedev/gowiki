@@ -2,9 +2,9 @@ package importer
 
 import "strings"
 
-// ConvertImageSize converts a DokuWiki image size to Gowiki format.
+// ConvertImageSize converts a DokuWiki image size to Sargon format.
 // DokuWiki: "200" or "200x100"
-// Gowiki:   "200px" or "200px;100px"
+// Sargon:   "200px" or "200px;100px"
 func ConvertImageSize(dwSize string) string {
 	if dwSize == "" {
 		return ""

@@ -2,13 +2,13 @@
 
 ## 1. Overview
 
-The **Slides plugin** turns fenced markdown content into a fullscreen slideshow presentation. Slides are separated by `---` and contain standard Gowiki markdown. A "Present" button launches the presentation.
+The **Slides plugin** turns fenced markdown content into a fullscreen slideshow presentation. Slides are separated by `---` and contain standard Sargon markdown. A "Present" button launches the presentation.
 
 ### Design Goals
 
 - Simple syntax: fenced block with `---` separators, regular markdown inside each slide
 - Lightweight custom presentation engine — zero external dependencies
-- Consistent with Gowiki architecture: markdown is ground truth, rendering is a frontend concern
+- Consistent with Sargon architecture: markdown is ground truth, rendering is a frontend concern
 - Plugin boundary respected: disabling the plugin leaves the fenced block as a code block fallback
 - Phase 1 scope: atomic node, basic presentation mode, no inline slide editing
 
@@ -44,7 +44,7 @@ The **Slides plugin** turns fenced markdown content into a fullscreen slideshow 
 ```
 ```
 
-The opening fence is `` ```slides `` followed by optional parameters. The body contains slide content separated by `---` on its own line. Each slide's content is standard Gowiki markdown.
+The opening fence is `` ```slides `` followed by optional parameters. The body contains slide content separated by `---` on its own line. Each slide's content is standard Sargon markdown.
 
 ### Slide separator
 
@@ -126,7 +126,7 @@ Thank you for your attention
 
 ### Slide content
 
-Each slide supports standard Gowiki markdown:
+Each slide supports standard Sargon markdown:
 
 - Headings (`#` through `######`)
 - Paragraphs with hard line breaks
@@ -258,7 +258,7 @@ A minimal custom engine, ~200 lines of JS/CSS. No external library. Activated by
 
 ### Slide rendering
 
-Each slide's markdown fragment is rendered to HTML using a **standalone markdown-it instance** configured with Gowiki's core dialect rules (hard breaks, ATX headings, etc.). Plugin-specific markdown-it rules are not loaded in Phase 1 — only standard block/inline elements render.
+Each slide's markdown fragment is rendered to HTML using a **standalone markdown-it instance** configured with Sargon's core dialect rules (hard breaks, ATX headings, etc.). Plugin-specific markdown-it rules are not loaded in Phase 1 — only standard block/inline elements render.
 
 ### Fullscreen overlay structure
 
@@ -302,7 +302,7 @@ Each slide's markdown fragment is rendered to HTML using a **standalone markdown
 
 ### No animations
 
-Slide transitions are instant. No fade, no slide-in. Consistent with Gowiki's approach (same decision as chart animations).
+Slide transitions are instant. No fade, no slide-in. Consistent with Sargon's approach (same decision as chart animations).
 
 ---
 
@@ -497,7 +497,7 @@ None. The presentation engine is pure JS/CSS.
 ## 12. Phase 2 (Future)
 
 - **Rich editor:** inline slide preview, per-slide editing panel, slide reordering
-- **Plugin nodes:** charts, tables, spoilers rendered inside slides using the full Gowiki rendering pipeline
+- **Plugin nodes:** charts, tables, spoilers rendered inside slides using the full Sargon rendering pipeline
 - **Speaker notes:** syntax TBD (possibly `???` or `Notes:` separator within a slide), separate presenter view
 - **Presenter view:** dual-screen — current slide on projector, next slide + notes + timer on presenter screen
 - **Custom styling:** per-presentation CSS overrides or named themes beyond light/dark
@@ -509,7 +509,7 @@ None. The presentation engine is pure JS/CSS.
 
 ## 13. Decisions
 
-1. **Custom engine over reveal.js** — reveal.js is ~300 KB gzipped, opinionated about DOM structure and CSS, and pulls in styles that would conflict with Gowiki. A custom engine is ~200 lines of JS, zero dependencies, and gives full control over the presentation UX. The trade-off is fewer features, but Phase 1 only needs basic slide navigation.
+1. **Custom engine over reveal.js** — reveal.js is ~300 KB gzipped, opinionated about DOM structure and CSS, and pulls in styles that would conflict with Sargon. A custom engine is ~200 lines of JS, zero dependencies, and gives full control over the presentation UX. The trade-off is fewer features, but Phase 1 only needs basic slide navigation.
 
 2. **Atomic node, not container** — The body contains multiple slides, each an independent markdown fragment. Making each slide a separate PM node would require a complex nested schema (`slides > slide > block+`), with the `---` separator needing its own schema treatment. Storing as raw text in a `data` attr keeps it simple and avoids schema complexity. The trade-off is no inline editing — data editing is via property panel textarea (Phase 1).
 

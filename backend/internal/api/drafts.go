@@ -9,8 +9,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	markdown_pkg "gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/storage"
+	markdown_pkg "sargon/backend/internal/markdown"
+	"sargon/backend/internal/storage"
 )
 
 var flowMarkerRe = regexp.MustCompile(`\{#/?@?[A-Za-z0-9._-]+/?\}`)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reintroduce DokuWiki folded blocks as Gowiki spoiler blocks.
+"""Reintroduce DokuWiki folded blocks as Sargon spoiler blocks.
 
 Uses distinctive text anchors to find content boundaries in each page,
 then wraps the content in ```spoiler Title ... ``` fences.

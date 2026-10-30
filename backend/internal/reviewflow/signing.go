@@ -14,7 +14,7 @@ import (
 	"os"
 	"time"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // SigningVerifier verifies X.509 signatures on reviewflow confirmations.

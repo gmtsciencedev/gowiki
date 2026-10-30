@@ -8,7 +8,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // editSpec is one anchored find-and-replace, parsed from the tool call's

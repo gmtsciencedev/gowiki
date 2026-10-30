@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // Store tests exercise the full Postgres schema: todo_tasks, todo_completions,

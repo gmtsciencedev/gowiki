@@ -15,17 +15,17 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 
-	"gowiki/backend/internal/api"
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/bibliography"
-	"gowiki/backend/internal/comment"
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/lifecycle"
-	"gowiki/backend/internal/manual"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
-	"gowiki/backend/internal/todo"
+	"sargon/backend/internal/api"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/bibliography"
+	"sargon/backend/internal/comment"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/lifecycle"
+	"sargon/backend/internal/manual"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
+	"sargon/backend/internal/todo"
 )
 
 func main() {

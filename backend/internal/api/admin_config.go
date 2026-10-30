@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // handleGetConfig returns the full site configuration.

@@ -612,7 +612,7 @@ type Reference struct {
 // dangling foreign-key references.
 //
 // Only scalar lookup/tag columns are inspected. Multi-enum columns do not
-// carry foreign-key references in Gowiki today, so they are skipped.
+// carry foreign-key references in Sargon today, so they are skipped.
 // Errors from any single scanned table are logged and the scan continues —
 // a broken table shouldn't hide references living in other, healthy tables.
 func (ds *DataStore) FindReferencesTo(ctx context.Context, targetTable string, targetRowID int) ([]Reference, error) {

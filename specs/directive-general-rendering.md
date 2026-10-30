@@ -1,6 +1,6 @@
 # Directive rendering — general principles
 
-Every `{directive}` in Gowiki has two visual surfaces: a **rendering box** (what the reader sees on the page) and a **property panel** (how the author edits the directive's attributes). This spec codifies how both should look and behave so every plugin — existing and future — presents a consistent, calm surface.
+Every `{directive}` in Sargon has two visual surfaces: a **rendering box** (what the reader sees on the page) and a **property panel** (how the author edits the directive's attributes). This spec codifies how both should look and behave so every plugin — existing and future — presents a consistent, calm surface.
 
 ## 1. The rendering box
 

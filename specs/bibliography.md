@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The bibliography plugin lets authors cite scientific publications inline and have a formatted reference list rendered elsewhere on the page. It follows the footnote model already in Gowiki: an inline marker with a hover popup, plus a cumulative list at a predictable location.
+The bibliography plugin lets authors cite scientific publications inline and have a formatted reference list rendered elsewhere on the page. It follows the footnote model already in Sargon: an inline marker with a hover popup, plus a cumulative list at a predictable location.
 
 Citations are declared by identifier (PubMed ID or DOI) — the plugin fetches the publication's metadata once, caches it, and renders the citation consistently everywhere it appears.
 
@@ -44,7 +44,7 @@ Attribute reference:
 | `pmid` | integer string | PubMed ID |
 | `doi` | string | DOI (may contain slashes, quote if needed) |
 
-The directive is self-contained (no body), follows the standard Gowiki directive grammar, and can appear anywhere inline text is allowed: paragraphs, table cells, list items.
+The directive is self-contained (no body), follows the standard Sargon directive grammar, and can appear anywhere inline text is allowed: paragraphs, table cells, list items.
 
 ### References list
 
@@ -170,7 +170,7 @@ Both return rich JSON. The fetcher extracts the fields above and discards the re
 
 ### User-Agent
 
-All outbound requests send `User-Agent: Gowiki-Bibliography/1.0 (+<server_url>; mailto:<admin_email>)` per NIH guidelines and Crossref etiquette.
+All outbound requests send `User-Agent: Sargon-Bibliography/1.0 (+<server_url>; mailto:<admin_email>)` per NIH guidelines and Crossref etiquette.
 
 ---
 
@@ -237,7 +237,7 @@ The page-level aggregation is a post-render step: after the document is parsed, 
 
 ### Copy/paste semantics
 
-The node copies as its directive form (`{publication pmid=123}`) so pasting into another page preserves the citation. Pasting into a non-Gowiki target yields the resolved `[Author, Year]` text.
+The node copies as its directive form (`{publication pmid=123}`) so pasting into another page preserves the citation. Pasting into a non-Sargon target yields the resolved `[Author, Year]` text.
 
 ---
 
@@ -266,7 +266,7 @@ When `enabled: false`, directives render as `[citation disabled]` and no network
 
 2. **Author-year inline, author-year in list** — Numbered citations are common in physics and IEEE fields but are confusing to read and write in wiki prose. Author-year is the default; a numbered option may come in a later version.
 
-3. **Hover = footnote-style popup** — Reuses existing frontend infrastructure and matches a reader expectation Gowiki already established for footnotes.
+3. **Hover = footnote-style popup** — Reuses existing frontend infrastructure and matches a reader expectation Sargon already established for footnotes.
 
 4. **Cache is permanent** — Metadata rarely changes; when it does, an admin can manually refresh. Avoids periodic re-fetches and network traffic.
 

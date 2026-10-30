@@ -198,7 +198,7 @@ func handleGenerateCA(caStore *CAStore) http.HandlerFunc {
 			return
 		}
 		if req.Organization == "" {
-			req.Organization = "Gowiki"
+			req.Organization = "Sargon"
 		}
 		if req.CommonName == "" {
 			req.CommonName = req.Organization + " Document Signing CA"

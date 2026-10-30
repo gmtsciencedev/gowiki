@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BINARY=$(mktemp -t gowiki-server.XXXXXX)
+BINARY=$(mktemp -t sargon-server.XXXXXX)
 
 cleanup() {
   if [[ -n "${BACKEND_PID:-}" ]]; then

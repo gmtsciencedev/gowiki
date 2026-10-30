@@ -1,15 +1,57 @@
 # Changelog
 
-All notable changes to Gowiki. Format loosely follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Dates are ISO-8601.
+All notable changes to Sargon (named Gowiki up to `v1.0.0-rc.5`). Format
+loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Dates are ISO-8601.
 
-Gowiki is a from-scratch DokuWiki replacement built on a bijective Markdown
+Sargon is a from-scratch DokuWiki replacement built on a bijective Markdown
 dialect with a ProseMirror-backed dual-mode editor. See `CLAUDE.md` for the
 project's design invariants and `specs/` for the dialect specification.
 
 ## [Unreleased]
 
-Nothing pending — the working tree matches `v1.0.0-rc.5`.
+### Changed
+
+- **Renamed from Gowiki to Sargon.** The repository moved to
+  `github.com/sargonwiki/sargon` (GitHub redirects the old
+  `delahondes/gowiki` URLs); the Go module is `sargon/backend`; binaries
+  and release artifacts are `sargon-server-*` and
+  `sargon-frontend-dist-*`; the MCP server announces itself as
+  `sargon-mcp`; new signing CAs default to `O=Sargon` and self-signed
+  certificates carry `O=Sargon Self-Signed`. Certificates and signatures
+  issued under the old name stay valid — the organisation field is
+  never checked. New logo (a lamassu) and favicons. Internal identifiers
+  that are persisted or used as parse hooks keep their `gowiki` prefix:
+  CSS classes, the `gowiki_session` and `gowiki_theme` cookies, and
+  browser storage keys. Existing sessions and preferences carry over.
+- Locally built binaries are no longer tracked in git.
+
+### Added
+
+- **Multi-series charts**: `|`-separated values give grouped bars and
+  multi-line charts.
+- **Notification throttling**: per-user debounce window (admin setting)
+  groups task notifications into one email; at most one email per user
+  per document per day.
+- **Reviewflow `manual_release=yes`**: a "Ready for signature" checkbox
+  gates the first signature request. Signers are alerted one at a time,
+  in the order the roles are written; `parallel=true` alerts everyone
+  at once.
+- **Backlinks of row-bound pages** list the pages whose
+  `{database-query}` reads that row's table.
+
+### Fixed
+
+- Reviewflow reconciler no longer recreates review tasks on every
+  restart (which re-sent notification emails), and reports only the
+  pages it actually changed.
+- Diff viewer wraps long lines instead of scrolling sideways.
+- Editor: the caret no longer jumps to the end of the page when the
+  editor loses focus, so links and attachments are inserted at the
+  caret (notably inside lists).
+- Cmd+K with nothing selected inserts a new link at the caret, using
+  the target page's title; it no longer takes over the previous word
+  or drops a typed space, and opens exactly one dialog.
 
 ## [1.0.0-rc.5] — 2026-10-09
 

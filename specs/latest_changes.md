@@ -1,4 +1,4 @@
-# Gowiki — Latest Changes Plugin Specification
+# Sargon — Latest Changes Plugin Specification
 
 
 ## 1. Overview
@@ -18,7 +18,7 @@ The **latest changes plugin** embeds a list of recently changed pages into any w
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│                   Gowiki Core                         │
+│                   Sargon Core                         │
 │                                                       │
 │  ┌───────────────────────┐                            │
 │  │  storage.Changelog    │                            │
@@ -275,8 +275,8 @@ On mount, fetches `GET /api/changes?count=N&path=...&type=...&user=...` and rend
 
 3. **No display name resolution** — author is shown as the raw username. This keeps the plugin simple and avoids extra API calls. Display name resolution can be added later if needed.
 
-4. **Path prefix filtering** — uses path prefixes (not namespace names) to be consistent with Gowiki's path-based addressing. The `-` prefix for exclusion follows a common convention.
+4. **Path prefix filtering** — uses path prefixes (not namespace names) to be consistent with Sargon's path-based addressing. The `-` prefix for exclusion follows a common convention.
 
 5. **Public read endpoint** — `GET /api/changes` uses `optionalAuth` with no ACL check, consistent with `/api/search` and `/api/sitemap`. The changelog itself does not contain sensitive content (just page paths, authors, and timestamps).
 
-6. **String attrs** — all schema attributes are strings (not numbers) for consistency with other Gowiki plugins (include, tag-query). The backend parses `count` as an integer.
+6. **String attrs** — all schema attributes are strings (not numbers) for consistency with other Sargon plugins (include, tag-query). The backend parses `count` as an integer.

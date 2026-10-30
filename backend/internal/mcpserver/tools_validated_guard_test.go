@@ -7,7 +7,7 @@ import (
 
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 
-	"gowiki/backend/internal/reviewflow"
+	"sargon/backend/internal/reviewflow"
 )
 
 // The validated-page guard shared by edit_page and write_page: refuse

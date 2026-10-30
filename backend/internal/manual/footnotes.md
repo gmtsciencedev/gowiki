@@ -1,6 +1,6 @@
 # Footnotes
 
-Gowiki supports inline footnotes that appear as superscript numbers with hover tooltips.
+Sargon supports inline footnotes that appear as superscript numbers with hover tooltips.
 
 ## 1. Syntax
 

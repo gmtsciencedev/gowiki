@@ -263,7 +263,7 @@ Plugins do not manage authentication, access control, configuration, document id
 
 Plugins may be loaded at runtime by the frontend as independent bundles. Disabling a plugin must not corrupt documents or make content unreadable. Disabling a plugin may cause loss of specialized semantics, but must never break document loading, editing, or storage as Markdown.
 
-NB: some features that appear as plugins in Dokuwiki (e.g. PDF export, history) are implemented as core capabilities in Gowiki, though plugins may contribute declarative extensions (such as rendering rules or metadata).
+NB: some features that appear as plugins in Dokuwiki (e.g. PDF export, history) are implemented as core capabilities in Sargon, though plugins may contribute declarative extensions (such as rendering rules or metadata).
 
 ## Structured data
 

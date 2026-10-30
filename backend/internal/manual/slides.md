@@ -20,7 +20,7 @@ The Slides plugin turns markdown content into a fullscreen slideshow presentatio
 ```
 ````
 
-The opening fence is `` ```slides `` followed by optional parameters. Each slide is separated by `---` on its own line. Slide content is standard Gowiki markdown (headings, lists, bold, italic, images, tables, code blocks, etc.).
+The opening fence is `` ```slides `` followed by optional parameters. Each slide is separated by `---` on its own line. Slide content is standard Sargon markdown (headings, lists, bold, italic, images, tables, code blocks, etc.).
 
 ## 1. Options
 
@@ -109,7 +109,7 @@ In raw mode, edit the fenced block directly.
 
 ## 1. Slide content
 
-Each slide supports standard Gowiki markdown:
+Each slide supports standard Sargon markdown:
 
 - Headings (`#` through `######`)
 - Paragraphs with line breaks

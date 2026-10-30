@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // formatRetryAfter renders a duration in the format RFC 9110 §10.2.3 asks

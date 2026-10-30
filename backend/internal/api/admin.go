@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // requireAdmin is middleware that checks the authenticated user belongs to the "admin" group.

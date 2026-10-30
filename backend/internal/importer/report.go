@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Markdown generates the import report as a Gowiki Markdown document.
+// Markdown generates the import report as a Sargon Markdown document.
 func (r *Report) Markdown() string {
 	var b strings.Builder
 

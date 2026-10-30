@@ -12,7 +12,7 @@ import (
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 func (s *Server) handleRender(w http.ResponseWriter, r *http.Request) {

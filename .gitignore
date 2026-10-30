@@ -24,3 +24,12 @@ backend/data/
 # other codes for reference
 reference_code/
 .mcp.json
+# Locally built binaries
+/*-server
+/backend/*-server
+/backend/import
+/backend/import-struct
+/backend/migrate-reviewflow-history
+/backend/tag-attic-validated
+/migrate-reviewflow-history
+/tag-attic-validated

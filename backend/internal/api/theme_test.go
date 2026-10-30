@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/config"
 )
 
 // newThemeTestServer wires a userStore + a temp configStore. The theme

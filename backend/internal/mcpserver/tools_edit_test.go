@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 func TestApplyEdits(t *testing.T) {

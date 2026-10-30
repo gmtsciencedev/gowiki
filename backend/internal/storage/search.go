@@ -10,7 +10,7 @@ import (
 	"github.com/blevesearch/bleve/v2/mapping"
 	"github.com/blevesearch/bleve/v2/search/highlight/highlighter/ansi"
 
-	"gowiki/backend/internal/markdown"
+	"sargon/backend/internal/markdown"
 )
 
 // SearchResult represents a single search hit.

@@ -4,11 +4,11 @@ import (
 	"path"
 	"strings"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // PageSourceToTarget converts a DokuWiki page path (relative to pages/)
-// to a Gowiki content path (relative to content/).
+// to a Sargon content path (relative to content/).
 // e.g. "ns/page.txt" -> "ns/page.md", "ns/start.txt" -> "ns/index.md"
 func PageSourceToTarget(srcPath string) string {
 	// Remove .txt extension, add .md
@@ -61,7 +61,7 @@ func IsTemplatePath(srcPath string) bool {
 		base == "c_template" || base == "i_template"
 }
 
-// DokuWikiLinkToPath converts a DokuWiki internal link target to a Gowiki path.
+// DokuWikiLinkToPath converts a DokuWiki internal link target to a Sargon path.
 // currentNS is the namespace of the page containing the link (e.g. "regulatory/smq/ps01").
 func DokuWikiLinkToPath(link string, currentNS string) string {
 	// Strip any query parameters (e.g. ?rev=xxx)
@@ -105,7 +105,7 @@ func DokuWikiLinkToPath(link string, currentNS string) string {
 	return normalizeLinkPath("/" + link)
 }
 
-// DokuWikiMediaToPath converts a DokuWiki media reference to a Gowiki path.
+// DokuWikiMediaToPath converts a DokuWiki media reference to a Sargon path.
 func DokuWikiMediaToPath(mediaRef string, currentNS string) string {
 	mediaRef = strings.TrimSpace(mediaRef)
 
@@ -146,7 +146,7 @@ func DokuWikiMediaToPath(mediaRef string, currentNS string) string {
 func normalizeLinkPath(p string) string {
 	p = path.Clean(p)
 
-	// DokuWiki links are case-insensitive; Gowiki pages are stored lowercase.
+	// DokuWiki links are case-insensitive; Sargon pages are stored lowercase.
 	p = strings.ToLower(p)
 
 	// Rename trailing /start to /index

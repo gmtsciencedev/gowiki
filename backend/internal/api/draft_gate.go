@@ -1,8 +1,8 @@
 package api
 
 import (
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/reviewflow"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/reviewflow"
 )
 
 // draftGateDecision tells handleGetPage what to do about a

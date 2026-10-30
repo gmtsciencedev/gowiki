@@ -13,10 +13,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
 )
 
 // The template handlers touch a real FileStore (only real *FileStore

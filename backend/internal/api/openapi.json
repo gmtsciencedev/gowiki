@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Gowiki AI Content API",
+    "title": "Sargon AI Content API",
     "version": "1.0.0",
     "description": "API for AI assistants to read and manage wiki content on behalf of authenticated users. Authentication is via personal API tokens (Bearer gwk_...). IMPORTANT: Before performing any content operations, fetch GET /api/ai/v1/conventions for wiki-specific rules, markdown dialect constraints, and content guidelines that you MUST follow.",
     "x-ai-conventions-url": "/api/ai/v1/conventions",
@@ -10,7 +10,7 @@
   "servers": [
     {
       "url": "/",
-      "description": "This Gowiki instance"
+      "description": "This Sargon instance"
     }
   ],
   "security": [

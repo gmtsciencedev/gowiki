@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"gowiki/backend/internal/markdown"
+	"sargon/backend/internal/markdown"
 )
 
 var ErrPageNotFound = errors.New("page not found")

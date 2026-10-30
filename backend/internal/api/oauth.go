@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // handleAuthProviders returns which login methods are available.

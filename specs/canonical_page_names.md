@@ -2,7 +2,7 @@
 
 ## The rule
 
-Every page in Gowiki has exactly one canonical path. The canonical path is what appears in URLs, API responses, WebSocket messages, link targets, and all internal references.
+Every page in Sargon has exactly one canonical path. The canonical path is what appears in URLs, API responses, WebSocket messages, link targets, and all internal references.
 
 | Storage file | Canonical path | Type |
 |---|---|---|

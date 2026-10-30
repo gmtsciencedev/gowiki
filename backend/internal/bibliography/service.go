@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/singleflight"
 	"golang.org/x/time/rate"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // Service coordinates cache lookups, rate-limited network fetches, and
@@ -116,5 +116,5 @@ func (s *Service) userAgent() string {
 	if url == "" {
 		url = "local"
 	}
-	return fmt.Sprintf("Gowiki-Bibliography/1.0 (+%s; mailto:%s)", url, contact)
+	return fmt.Sprintf("Sargon-Bibliography/1.0 (+%s; mailto:%s)", url, contact)
 }

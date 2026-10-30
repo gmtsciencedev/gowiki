@@ -13,9 +13,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/storage"
 )
 
 // resolvePageFolder computes a page path from a page_folder pattern and row data.

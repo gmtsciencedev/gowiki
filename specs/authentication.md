@@ -2,7 +2,7 @@
 
 ## Overview
 
-Gowiki supports two authentication methods: local username/password and OAuth/OIDC with Azure AD (Microsoft 365). Authorization is enforced via a regex-based ACL system. All auth state is stored as JSON files in `data/meta/`.
+Sargon supports two authentication methods: local username/password and OAuth/OIDC with Azure AD (Microsoft 365). Authorization is enforced via a regex-based ACL system. All auth state is stored as JSON files in `data/meta/`.
 
 ## Data Model
 
@@ -249,7 +249,7 @@ Typical use cases:
 - Per-user documents: `interviews/@self-.*` — pages prefixed with the username (e.g., `alice-2024`)
 - Anonymous users never match `@self` rules
 
-This is the Gowiki equivalent of DokuWiki's `%USER%` ACL template rules.
+This is the Sargon equivalent of DokuWiki's `%USER%` ACL template rules.
 
 ### Default ACL rules
 

@@ -1,6 +1,6 @@
 # Collaborative Editing
 
-Gowiki supports real-time collaborative editing. Multiple users can work on the same page simultaneously, seeing each other's changes as they type.
+Sargon supports real-time collaborative editing. Multiple users can work on the same page simultaneously, seeing each other's changes as they type.
 
 ## 1. How it works
 

@@ -1,8 +1,8 @@
-# CLAUDE.md — Gowiki
+# CLAUDE.md — Sargon
 
 ## Project overview
 
-Gowiki is a rewrite of Dokuwiki with three fundamental changes:
+Sargon is a rewrite of Dokuwiki with three fundamental changes:
 - Storage format is a custom bijective Markdown dialect (not Dokuwiki's syntax)
 - The editor is tightly and natively integrated with ProseMirror (dual mode: raw Markdown + visual)
 - The backend is Go; the frontend is TypeScript/ESM centered on ProseMirror

@@ -1,6 +1,6 @@
-# Gowiki User Manual
+# Sargon User Manual
 
-Welcome to the Gowiki user manual. This guide covers everything you need to know to use the wiki effectively.
+Welcome to the Sargon user manual. This guide covers everything you need to know to use the wiki effectively.
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ Welcome to the Gowiki user manual. This guide covers everything you need to know
 
 ## Editing
 
-- [Markdown Syntax](./syntax) — The Gowiki markdown dialect
+- [Markdown Syntax](./syntax) — The Sargon markdown dialect
 - [Visual Editor](./visual-editor) — Using the visual (WYSIWYG) editor
 - [Raw Editor](./raw-editor) — Editing markdown directly
 - [Keyboard Shortcuts](./shortcuts) — All keyboard and mouse shortcuts (macOS and Windows)

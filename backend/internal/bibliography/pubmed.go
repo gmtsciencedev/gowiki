@@ -51,7 +51,7 @@ func (s *Service) fetchPubMed(ctx context.Context, pmid string) (*Entry, error) 
 	q.Set("db", "pubmed")
 	q.Set("id", pmid)
 	q.Set("retmode", "json")
-	q.Set("tool", "Gowiki-Bibliography")
+	q.Set("tool", "Sargon-Bibliography")
 	if s.cfg.AdminContactEmail != "" {
 		q.Set("email", s.cfg.AdminContactEmail)
 	}

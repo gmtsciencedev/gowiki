@@ -8,7 +8,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // presencePageKey returns the canonical page path used by the presence hub
@@ -19,7 +19,7 @@ func presencePageKey(pagePath string) string {
 	return "/" + pagePath
 }
 
-// The draft-session tools let an agent act as a member of Gowiki's
+// The draft-session tools let an agent act as a member of Sargon's
 // collaborative edit system. The flow mirrors what a human editor does in
 // the browser:
 //
@@ -148,7 +148,7 @@ func registerSaveEditDraftTool(srv *mcpsrv.MCPServer, deps Deps) {
 			mcpgo.Description("Token returned by enter_edit_session."),
 		),
 		mcpgo.WithString("markdown", mcpgo.Required(),
-			mcpgo.Description("Draft markdown in the Gowiki dialect."),
+			mcpgo.Description("Draft markdown in the Sargon dialect."),
 		),
 		mcpgo.WithString("summary",
 			mcpgo.Description("Change summary for audit. Format: '[AI: <tool-name>] <description>'. Required when the server enforces summaries."),

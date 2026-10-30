@@ -4,7 +4,7 @@ This page describes the rules that AI agents must follow when working with wiki 
 
 ## 1. Markdown dialect
 
-Gowiki uses a bijective markdown dialect. Key rules:
+Sargon uses a bijective markdown dialect. Key rules:
 
 - `*italic*` only — `_text_` means underline, NOT italic
 - `**bold**` only — `__bold__` is rejected

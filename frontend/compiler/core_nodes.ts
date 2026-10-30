@@ -1454,7 +1454,7 @@ function registerCodeExpand(reg: Registry) {
   const codeExpandKey = new PluginKey("gowiki.codeExpand")
 
   function resolveVar(name: string, fallback: string): string {
-    const ctx = (window as any).__gowikiGlobalVarContext?.()
+    const ctx = (window as any).__sargonGlobalVarContext?.()
     if (!ctx) return fallback || `{{${name}}}`
     const meta = ctx.pageMeta
     switch (name) {

@@ -13,7 +13,7 @@ import (
 
 var reListLine = regexp.MustCompile(`^((?:  )+)([\*\-])\s(.*)$`)
 
-// ConvertListLine converts a DokuWiki list line to Gowiki Markdown.
+// ConvertListLine converts a DokuWiki list line to Sargon Markdown.
 // Returns the converted line and true if it was a list line.
 func ConvertListLine(line string, currentNS string) (string, bool) {
 	m := reListLine.FindStringSubmatch(line)
@@ -34,13 +34,13 @@ func ConvertListLine(line string, currentNS string) (string, bool) {
 	// Convert inline markup in the content
 	content = ConvertInline(content, currentNS, "list")
 
-	// Gowiki indentation: 2 spaces per additional level (level 1 = no indent)
-	gowikiIndent := strings.Repeat("  ", level-1)
+	// Sargon indentation: 2 spaces per additional level (level 1 = no indent)
+	sargonIndent := strings.Repeat("  ", level-1)
 
 	if marker == "-" {
-		return gowikiIndent + "1. " + content, true
+		return sargonIndent + "1. " + content, true
 	}
-	return gowikiIndent + "- " + content, true
+	return sargonIndent + "- " + content, true
 }
 
 // IsListLine returns true if the line looks like a DokuWiki list line.

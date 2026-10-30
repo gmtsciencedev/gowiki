@@ -480,8 +480,8 @@ function buildPanel(
         const insertPos = Math.max(0, tr.mapping.map(parentPos) - 1)
         tr = tr.insert(insertPos, plainImage)
         view.dispatch(tr)
-        if ((window as any).__gowikiSetStatus) {
-          ;(window as any).__gowikiSetStatus("Image converted to inline (properties removed)")
+        if ((window as any).__sargonSetStatus) {
+          ;(window as any).__sargonSetStatus("Image converted to inline (properties removed)")
         }
       })
       inlineSep.appendChild(inlineBtn)
@@ -847,8 +847,8 @@ export function promoteInlineImage(view: any, pos: number, attrs: Record<string,
     /* leave default */
   }
   view.dispatch(tr)
-  if ((window as any).__gowikiSetStatus) {
-    ;(window as any).__gowikiSetStatus("Image converted to block (moved to its own paragraph)")
+  if ((window as any).__sargonSetStatus) {
+    ;(window as any).__sargonSetStatus("Image converted to block (moved to its own paragraph)")
   }
   return true
 }

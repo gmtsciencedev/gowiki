@@ -125,7 +125,7 @@ func TestExtractLinkOccurrences_PreservesLabelWithMarkup(t *testing.T) {
 
 func TestExtractLinkOccurrences_EmptyLabel(t *testing.T) {
 	t.Parallel()
-	// Empty-label links [](/path) are common in Gowiki — the title is
+	// Empty-label links [](/path) are common in Sargon — the title is
 	// pulled from the target page at render time. Still a real link,
 	// still worth reporting as broken.
 	md := "[](/x)\n"

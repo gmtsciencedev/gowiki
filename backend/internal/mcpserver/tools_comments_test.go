@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/comment"
+	"sargon/backend/internal/comment"
 )
 
 // buildCommentThreadView is the shaping helper the list_page_comments

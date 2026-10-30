@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // The notify surface has an SMTP dial in sendEmail we don't exercise. The

@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/collab"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/collab"
+	"sargon/backend/internal/storage"
 )
 
 // newPresenceTestServer wires the minimum stack presence handlers use:

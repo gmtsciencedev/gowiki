@@ -257,7 +257,7 @@ The lookup type fetches all rows from the referenced table (cached for 30 second
 
 ### 5.15 User
 
-A field that references a Gowiki user account. Stored as the username string.
+A field that references a Sargon user account. Stored as the username string.
 
 | Property | Value |
 |---|---|
@@ -269,7 +269,7 @@ The user list is fetched from the `/api/users/list` endpoint (cached for 30 seco
 
 ## 6. DokuWiki struct type mapping
 
-| DokuWiki type | Gowiki type | Notes |
+| DokuWiki type | Sargon type | Notes |
 |---|---|---|
 | `Text` | `text` | Direct mapping |
 | `LongText` | `text` | Textarea variant; use text |

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // dailyCapWindow is the per-(user, page) suppression window. A user

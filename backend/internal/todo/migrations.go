@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // RunMigrations creates the todo tables if they don't exist.

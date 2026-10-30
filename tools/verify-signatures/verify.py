@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Gowiki Signature Verification Tool v2
+Sargon Signature Verification Tool v2
 
 Standalone tool for auditors to verify X.509 document signatures
-exported from Gowiki's reviewflow system.
+exported from Sargon's reviewflow system.
 
 Usage:
     python3 verify.py audit-export.json [--ca ca-cert.pem]
@@ -23,7 +23,7 @@ Signed payload definition:
   - The ECDSA signature is computed over this 32-byte hash (Web Crypto API hashes internally)
   - The signature format is IEEE P1363 (r || s) for ECDSA P-256 (64 bytes)
 
-No dependency on Gowiki — this tool uses only Python stdlib + cryptography.
+No dependency on Sargon — this tool uses only Python stdlib + cryptography.
 
 Install: pip install cryptography
 """
@@ -336,7 +336,7 @@ def verify_confirmation(conf, ca_cert=None, doc_markdown=None, revoked_certs=Non
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Gowiki Signature Verification Tool — verifies X.509 document signatures",
+        description="Sargon Signature Verification Tool — verifies X.509 document signatures",
         epilog="Signed payload: SHA-256 of the raw UTF-8 markdown bytes, signed with ECDSA P-256 (P1363 format)."
     )
     parser.add_argument("audit_file", help="Path to the audit export JSON file")

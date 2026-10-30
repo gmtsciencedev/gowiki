@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // newConfigTestServer wires just the config store. The two handlers

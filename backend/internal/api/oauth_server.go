@@ -1,4 +1,4 @@
-// HTTP handlers exposing gowiki as an OAuth 2.0 authorization server.
+// HTTP handlers exposing Sargon as an OAuth 2.0 authorization server.
 // See backend/internal/auth/oauthserver.go for the underlying storage and
 // PKCE mechanics. This file is the outward-facing HTTP contract:
 //
@@ -26,7 +26,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // registerOAuthServerRoutes wires the OAuth authorization-server endpoints
@@ -398,7 +398,7 @@ func (s *Server) handleOAuthToken(w http.ResponseWriter, r *http.Request) {
 
 // ── helpers ────────────────────────────────────────────────────
 
-// usernameFromSession reads the gowiki session cookie and returns the
+// usernameFromSession reads the session cookie and returns the
 // authenticated username, or "" if unauthenticated / invalid.
 func (s *Server) usernameFromSession(r *http.Request) string {
 	cookie, err := r.Cookie(auth.CookieName)

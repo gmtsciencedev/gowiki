@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // pageFolderRoot is called before a row is inserted to decide which ACL

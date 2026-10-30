@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"gowiki/backend/internal/markdown"
+	"sargon/backend/internal/markdown"
 )
 
 // handleGetMeFavorites returns the caller's favorites list, most-recently-

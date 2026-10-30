@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Migrate DokuWiki validation status to Gowiki reviewflow.
+Migrate DokuWiki validation status to Sargon reviewflow.
 
 Two categories:
   A) Pages with existing {reviewflow} directive → import validation status only
@@ -77,8 +77,8 @@ ROLE_TRANSLATIONS = {
     "reviewer": "reviewer",
 }
 
-# ── Namespace rename mapping (Gowiki → DokuWiki old names) ──
-# For each Gowiki namespace under smq/, list of DokuWiki meta paths to try
+# ── Namespace rename mapping (Sargon → DokuWiki old names) ──
+# For each Sargon namespace under smq/, list of DokuWiki meta paths to try
 NAMESPACE_ALIASES = {
     "dir": ["dir", "ps01"],
     "qara": ["qara", "ps02"],
@@ -101,9 +101,9 @@ def resolve_login(display_name: str) -> str | None:
 
 
 def find_dokuwiki_meta(gowiki_relpath: str, dokuwiki_meta_root: str) -> str | None:
-    """Find the DokuWiki .meta file for a given Gowiki content path.
+    """Find the DokuWiki .meta file for a given Sargon content path.
 
-    Gowiki: regulatory/smq/soft/sop01/index.md
+    Sargon: regulatory/smq/soft/sop01/index.md
     DokuWiki meta possibilities:
       - regulatory/smq/soft/sop01.meta (parent-level)
       - regulatory/smq/soft/sop01/start.meta (namespace start page)
@@ -370,7 +370,7 @@ def create_reviewflow_state(
 
 
 def get_page_version(gowiki_meta_root: str, page_relpath: str) -> int:
-    """Get the current page version from Gowiki metadata."""
+    """Get the current page version from Sargon metadata."""
     # Page metadata is at meta/{path}.json (replacing .md with .json)
     meta_rel = page_relpath.replace(".md", ".json")
     meta_path = os.path.join(gowiki_meta_root, meta_rel)
@@ -504,9 +504,9 @@ def process_page(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Migrate DokuWiki validations to Gowiki reviewflow")
-    parser.add_argument("--gowiki-content", required=True, help="Path to Gowiki data/content/")
-    parser.add_argument("--gowiki-meta", required=True, help="Path to Gowiki data/meta/")
+    parser = argparse.ArgumentParser(description="Migrate DokuWiki validations to Sargon reviewflow")
+    parser.add_argument("--gowiki-content", required=True, help="Path to Sargon data/content/")
+    parser.add_argument("--gowiki-meta", required=True, help="Path to Sargon data/meta/")
     parser.add_argument("--dokuwiki-meta", required=True, help="Path to DokuWiki import/data/meta/")
     parser.add_argument("--dry-run", action="store_true", help="Preview changes without writing")
     args = parser.parse_args()

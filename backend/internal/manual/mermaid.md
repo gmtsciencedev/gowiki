@@ -1,6 +1,6 @@
 # Mermaid Diagrams
 
-Gowiki supports [Mermaid](https://github.com/mermaid-js/mermaid) diagrams — text-based diagrams rendered as SVG directly in the page.
+Sargon supports [Mermaid](https://github.com/mermaid-js/mermaid) diagrams — text-based diagrams rendered as SVG directly in the page.
 
 ## 1. Basic syntax
 
@@ -129,7 +129,7 @@ A["Line one\nLine two"]
 ```
 
 {blockquote class=note}
-> The `\n` inside Mermaid labels is Mermaid's own syntax for line breaks within a node label. It is not the same as Gowiki's `\n` hard break syntax.
+> The `\n` inside Mermaid labels is Mermaid's own syntax for line breaks within a node label. It is not the same as Sargon's `\n` hard break syntax.
 
 ## 1. References
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"gowiki/backend/internal/aiassistant"
+	"sargon/backend/internal/aiassistant"
 )
 
 // reinitAIProvider re-creates the AI provider after a config change.
@@ -488,11 +488,11 @@ func insertProposalMarkers(content string, proposals []aiProposal) (string, []ai
 func buildAISystemPrompt(mode, pageContent, pagePath, _ string) string {
 	var b strings.Builder
 
-	b.WriteString("You are an AI assistant integrated into Gowiki, a wiki system. ")
+	b.WriteString("You are an AI assistant integrated into Sargon, a wiki system. ")
 	b.WriteString("You operate on the page the user is currently editing.\n\n")
 
 	// Full conventions.
-	b.WriteString("# Gowiki Markdown Dialect\n\n")
+	b.WriteString("# Sargon Markdown Dialect\n\n")
 	b.WriteString("You MUST follow these rules strictly. The dialect is bijective — one canonical syntax per node type.\n\n")
 	b.WriteString("## Syntax rules\n")
 	b.WriteString("- `*italic*` only — `_text_` means UNDERLINE, not italic\n")

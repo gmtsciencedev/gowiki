@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-Gowiki supports two blockquote forms:
+Sargon supports two blockquote forms:
 
 1. **Prefix form** (today, default) — CommonMark-style `>` at the start of
    each line:
@@ -75,7 +75,7 @@ The `>` prefix is a universal line decoration in Markdown, which is
 convenient for short quotes but breaks down the moment the block's
 content wants to be itself complex — nested fences, multi-line inline
 directives, tables with cell directives, other blocks. Every other
-rich-content construct in Gowiki (code blocks, mermaid, chart, slide,
+rich-content construct in Sargon (code blocks, mermaid, chart, slide,
 include) uses a triple-backtick-style fence; blockquote is the last
 holdout.
 
@@ -116,7 +116,7 @@ Body content — rich markdown, no `>` anywhere.
 - Visually echoes the prefix form (`>` → `>>>`).
 - Keeps triple-backtick exclusive to "code-ish" content (code blocks,
   mermaid, chart, etc.), which matches reader expectation.
-- Doesn't collide with any existing Gowiki or CommonMark construct.
+- Doesn't collide with any existing Sargon or CommonMark construct.
 
 ### 3.3 Semantics
 
@@ -133,7 +133,7 @@ always manually pick either.
 
 ### 3.4 Bijectivity
 
-Gowiki's dialect is bijective: one canonical syntax per construct. The
+Sargon's dialect is bijective: one canonical syntax per construct. The
 two-form design here doesn't break that, because the **canonical** form
 is determined by content, not author preference:
 

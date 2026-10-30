@@ -25,7 +25,7 @@ signing:
 
 ## 1. Company CA (Certificate Authority)
 
-Gowiki includes a built-in Certificate Authority that signs user certificates. This creates a trust chain: each user's signing key is endorsed by the company CA, and auditors can verify that chain.
+Sargon includes a built-in Certificate Authority that signs user certificates. This creates a trust chain: each user's signing key is endorsed by the company CA, and auditors can verify that chain.
 
 ### Generating the CA
 
@@ -76,7 +76,7 @@ The `trust_store` configuration accepts paths to additional trusted CA PEM files
 ```yaml
 signing:
   trust_store:
-    - /etc/gowiki/external-ca.pem
+    - /etc/sargon/external-ca.pem
 ```
 
 In most deployments, the built-in company CA is sufficient and `trust_store` can be left empty.

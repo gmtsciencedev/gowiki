@@ -3,7 +3,7 @@ package lifecycle
 import (
 	"testing"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // EF06 regulatory audit: retagging a document as `archived` must be

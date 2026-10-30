@@ -21,30 +21,30 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"gowiki/backend/internal/aiassistant"
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/bibliography"
-	"gowiki/backend/internal/collab"
-	"gowiki/backend/internal/comment"
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/lifecycle"
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
-	"gowiki/backend/internal/todo"
+	"sargon/backend/internal/aiassistant"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/bibliography"
+	"sargon/backend/internal/collab"
+	"sargon/backend/internal/comment"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/lifecycle"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
+	"sargon/backend/internal/todo"
 )
 
 //go:embed openapi.json
 var openapiJSON []byte
 
-// Version is the Gowiki software version string. Bump before tagging a
+// Version is the Sargon software version string. Bump before tagging a
 // release; the site-info endpoint and any manifest ride on this constant.
 const Version = "1.0.0-rc.5"
 
 // BuildCommit and BuildDate are injected at build time via -ldflags:
 //
-//	go build -ldflags "-X gowiki/backend/internal/api.BuildCommit=$(git rev-parse HEAD) -X gowiki/backend/internal/api.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" ./cmd/server
+//	go build -ldflags "-X sargon/backend/internal/api.BuildCommit=$(git rev-parse HEAD) -X sargon/backend/internal/api.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" ./cmd/server
 //
 // A dev build (plain `go build`) leaves them as "unknown", which is fine
 // for local work but means `/api/version` can't tell you what's deployed.

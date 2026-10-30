@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // TodoStore provides CRUD operations for tasks backed by PostgreSQL.

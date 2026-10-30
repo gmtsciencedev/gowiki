@@ -19,7 +19,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/storage"
 )
 
 // Upload / read caps. Keep them intentionally small: an agent that needs a
@@ -541,7 +541,7 @@ func registerUploadAttachmentInstructionsTool(srv *mcpsrv.MCPServer, deps Deps) 
 				"checks edit permission upfront, tells you whether a file already "+
 				"exists at that path (so you know if you need overwrite=true), and "+
 				"hands back the exact `curl -F` command you should run from your own "+
-				"shell. Fill in your local file path and set GOWIKI_TOKEN with a "+
+				"shell. Fill in your local file path and set SARGON_TOKEN with a "+
 				"valid API bearer token (see /wiki/manual/admin-tokens).",
 		),
 		mcpgo.WithString("path", mcpgo.Required(),
@@ -586,7 +586,7 @@ func registerUploadAttachmentInstructionsTool(srv *mcpsrv.MCPServer, deps Deps) 
 		// which makes agent retries actually diagnosable.
 		var cmd strings.Builder
 		cmd.WriteString("curl --fail-with-body \\\n")
-		cmd.WriteString("  -H \"Authorization: Bearer $GOWIKI_TOKEN\" \\\n")
+		cmd.WriteString("  -H \"Authorization: Bearer $SARGON_TOKEN\" \\\n")
 		cmd.WriteString("  -F \"file=@<local-path>;filename=" + name + "\" \\\n")
 		if overwrite {
 			cmd.WriteString("  -F \"overwrite=true\" \\\n")

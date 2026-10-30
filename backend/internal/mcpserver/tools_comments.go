@@ -8,7 +8,7 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/comment"
+	"sargon/backend/internal/comment"
 )
 
 // ── list_page_comments ─────────────────────────────────────────────────────

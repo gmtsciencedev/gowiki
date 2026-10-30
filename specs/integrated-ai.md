@@ -36,7 +36,7 @@ This works for power users but creates an adoption barrier. Most wiki users will
 
 | | External AI API (`ai_api.md`) | Integrated Assistant (this spec) |
 |---|---|---|
-| **Who is the AI client?** | User's external tool | Gowiki server |
+| **Who is the AI client?** | User's external tool | Sargon server |
 | **Authentication** | Personal API token | User's browser session |
 | **Setup** | User generates token, configures tool | None (admin configures provider key) |
 | **Scope** | Multi-page, batch, automation | Single-page, conversational |

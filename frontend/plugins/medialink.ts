@@ -35,7 +35,7 @@ const medialinkProperties = [
     options: (attrs: Record<string, any>) => {
       const opts = [{ value: "", label: "(default)" }]
       const href = attrs.href || ""
-      const cache = (window as any).__gowikiMediaVersions as Map<string, number> | undefined
+      const cache = (window as any).__sargonMediaVersions as Map<string, number> | undefined
       const maxVersion = cache?.get(href) ?? 0
       const currentV = attrs.version
       const currentN = currentV && currentV !== "latest" ? parseInt(currentV, 10) : 0

@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The theme system lets a Gowiki instance look different — light or dark, with its own brand palette — without requiring CSS edits or a code change. Users pick their preferred appearance (light, dark, or follow OS) from their profile; admins pick the instance-wide default and can override specific palette values.
+The theme system lets a Sargon instance look different — light or dark, with its own brand palette — without requiring CSS edits or a code change. Users pick their preferred appearance (light, dark, or follow OS) from their profile; admins pick the instance-wide default and can override specific palette values.
 
 All themeable values are exposed as CSS custom properties (variables) at `:root`. A theme is a small block of `var` overrides applied via a `data-theme="..."` attribute on `<html>`. Plugins read from the same variables so they stay consistent.
 
@@ -47,10 +47,10 @@ All themeable values are exposed as CSS custom properties (variables) at `:root`
 A "theme" in many wiki systems is a package of HTML templates, CSS, and
 assets that the admin drops into a themes directory. That model has two
 chronic problems: plugin compatibility breaks on every new plugin, and the
-theme package rots on every Gowiki upgrade because internal class names
+theme package rots on every Sargon upgrade because internal class names
 change.
 
-Gowiki chooses a different shape: **every theme is a set of values for the
+Sargon chooses a different shape: **every theme is a set of values for the
 same CSS custom properties**. There's no separate code path, no alternate
 template, no plugin-specific overrides layer. A theme is just data.
 
@@ -106,7 +106,7 @@ change automatically.
 
 ### 11.3 Tier 2 — Named presets
 
-A preset is a curated bundle of Tier-1 overrides shipped with Gowiki. The
+A preset is a curated bundle of Tier-1 overrides shipped with Sargon. The
 admin picks one by name; individual `overrides:` entries still merge on
 top so admins can tune without losing the preset's flavour.
 

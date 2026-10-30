@@ -105,7 +105,7 @@ func main() {
 - [Meeting Notes](/meetings)`,
 
 		"footer": `---
-Acme Corp Wiki | Powered by [Gowiki](https://github.com)`,
+Acme Corp Wiki | Powered by [Sargon](https://github.com)`,
 
 		"index": `# Welcome to Acme Wiki
 

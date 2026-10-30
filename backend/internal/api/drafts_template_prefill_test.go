@@ -13,9 +13,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
 )
 
 // newDraftsPrefillTestServer builds a Server with every dependency the

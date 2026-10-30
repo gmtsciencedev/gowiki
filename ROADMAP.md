@@ -31,7 +31,7 @@ fence with a language-like tag. Rationale:
   No new punctuation family to teach.
 - Extends cleanly: `` ```figure ``, `` ```aside ``, `` ```callout `` — each
   is a named variant of the same fenced-div machinery.
-- Reads as a first-class Gowiki construct rather than a repurposed
+- Reads as a first-class Sargon construct rather than a repurposed
   CommonMark idiom.
 
 **Bijectivity**: parse both `>` and the new fenced form on input, but

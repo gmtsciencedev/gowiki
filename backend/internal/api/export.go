@@ -12,7 +12,7 @@ import (
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 func (s *Server) handleExportPDF(w http.ResponseWriter, r *http.Request) {
@@ -85,8 +85,8 @@ func (s *Server) handleExportPDF(w http.ResponseWriter, r *http.Request) {
 	)
 
 	// Determine the wiki's site title for the running header. Falls back to
-	// "Gowiki" if no configuration is loaded (e.g. dev mode without a store).
-	siteTitle := "Gowiki"
+	// "Sargon" if no configuration is loaded (e.g. dev mode without a store).
+	siteTitle := "Sargon"
 	if s.configStore != nil {
 		if t := strings.TrimSpace(s.configStore.Get().Site.Title); t != "" {
 			siteTitle = t

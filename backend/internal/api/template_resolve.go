@@ -5,8 +5,8 @@ import (
 	"path"
 	"strings"
 
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/storage"
 )
 
 // titleFromPagePath derives a human-readable title from a page path

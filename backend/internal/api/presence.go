@@ -6,8 +6,8 @@ import (
 
 	"github.com/coder/websocket"
 
-	"gowiki/backend/internal/collab"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/collab"
+	"sargon/backend/internal/storage"
 )
 
 func (s *Server) handlePresenceWS(w http.ResponseWriter, r *http.Request) {

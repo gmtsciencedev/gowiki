@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fix uppercase internal page links in Gowiki markdown files.
+"""Fix uppercase internal page links in Sargon markdown files.
 
 Lowercases the path portion of internal page links like [text](/PATH/TO/PAGE)
 while preserving:

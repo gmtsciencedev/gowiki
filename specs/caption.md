@@ -2,7 +2,7 @@
 
 ## Motivation
 
-Academic and technical documents number their figures and tables ("Figure 1", "Table 3") and cross-reference them from the body text ("as shown in Figure 1"). Dokuwiki's caption plugin achieves this with XML-like `<figure>` / `<table>` wrapper elements — a syntax incompatible with Gowiki's Markdown dialect and its no-raw-HTML rule.
+Academic and technical documents number their figures and tables ("Figure 1", "Table 3") and cross-reference them from the body text ("as shown in Figure 1"). Dokuwiki's caption plugin achieves this with XML-like `<figure>` / `<table>` wrapper elements — a syntax incompatible with Sargon's Markdown dialect and its no-raw-HTML rule.
 
 This plugin provides the same functionality through the existing property/directive system: a `caption` attribute on image and table nodes, automatic numbering, and an inline reference syntax for cross-links.
 

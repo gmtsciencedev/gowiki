@@ -1,4 +1,4 @@
-// Package mcpserver exposes the Gowiki content and data APIs via the
+// Package mcpserver exposes the Sargon content and data APIs via the
 // Model Context Protocol (MCP) over Streamable HTTP. It reuses the existing
 // authentication and ACL enforcement from the HTTP API — clients authenticate
 // with the same API tokens, and every tool/resource call is ACL-checked
@@ -13,16 +13,16 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/comment"
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
-	"gowiki/backend/internal/todo"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/comment"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
+	"sargon/backend/internal/todo"
 )
 
 const (
-	serverName    = "gowiki-mcp"
+	serverName    = "sargon-mcp"
 	serverVersion = "1.0.0"
 )
 
@@ -327,7 +327,7 @@ func NewHandler(deps Deps) http.Handler {
 // serverInstructions is the human-readable prologue the MCP client shows to
 // the LLM before calling any tool. Keep it short — the detailed rules live
 // in the `get_conventions` tool.
-const serverInstructions = `Gowiki wiki MCP server.
+const serverInstructions = `Sargon wiki MCP server.
 
 Before making any content edit, call the get_conventions tool once to load the
 Markdown dialect rules and content guidelines. The dialect is bijective and

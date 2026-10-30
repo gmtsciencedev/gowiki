@@ -16,8 +16,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/database"
 )
 
 // callAdminDB is a small convenience — the admin_database handlers all

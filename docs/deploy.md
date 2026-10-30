@@ -1,6 +1,6 @@
-# Deploying Gowiki
+# Deploying Sargon
 
-This guide covers deploying Gowiki on a Linux VPS with automatic HTTPS via Let's Encrypt. The target is a minimal setup: one binary, one config file, one Postgres database.
+This guide covers deploying Sargon on a Linux VPS with automatic HTTPS via Let's Encrypt. The target is a minimal setup: one binary, one config file, one Postgres database.
 
 ## Prerequisites
 
@@ -19,23 +19,23 @@ make build-frontend
 
 # Cross-compile the Go binary for Linux
 cd backend
-GOOS=linux GOARCH=amd64 go build -o gowiki-server ./cmd/server
+GOOS=linux GOARCH=amd64 go build -o sargon-server ./cmd/server
 cd ..
 ```
 
 This produces two artifacts:
-- `backend/gowiki-server` — the server binary
+- `backend/sargon-server` — the server binary
 - `frontend/dist/` — the built frontend assets
 
 ## 2. Prepare the server
 
 ```bash
 # Create a dedicated user
-sudo useradd -r -m -d /opt/gowiki -s /bin/bash gowiki
+sudo useradd -r -m -d /opt/sargon -s /bin/bash sargon
 
 # Create directory structure
-sudo mkdir -p /opt/gowiki/{frontend/dist,data}
-sudo chown -R gowiki:gowiki /opt/gowiki
+sudo mkdir -p /opt/sargon/{frontend/dist,data}
+sudo chown -R gowiki:sargon /opt/sargon
 ```
 
 ## 3. Copy files
@@ -46,13 +46,13 @@ From your dev machine:
 SERVER=user@your-server
 
 # Binary
-scp backend/gowiki-server $SERVER:/opt/gowiki/
+scp backend/sargon-server $SERVER:/opt/sargon/
 
 # Frontend assets
-rsync -a --delete frontend/dist/ $SERVER:/opt/gowiki/frontend/dist/
+rsync -a --delete frontend/dist/ $SERVER:/opt/sargon/frontend/dist/
 
 # Data (first deploy only — contains pages, media, auth, metadata)
-rsync -a backend/data/ $SERVER:/opt/gowiki/data/
+rsync -a backend/data/ $SERVER:/opt/sargon/data/
 ```
 
 On subsequent deploys, only copy the binary and frontend assets. Do not overwrite `data/` — it contains your wiki content and configuration.
@@ -60,26 +60,26 @@ On subsequent deploys, only copy the binary and frontend assets. Do not overwrit
 ## 4. Set up PostgreSQL
 
 ```bash
-sudo -u postgres createuser gowiki
-sudo -u postgres createdb -O gowiki gowiki
+sudo -u postgres createuser sargon
+sudo -u postgres createdb -O sargon sargon
 ```
 
 If you need a password (remote connections or `md5` auth):
 
 ```bash
-sudo -u postgres psql -c "ALTER USER gowiki PASSWORD 'your-secure-password';"
+sudo -u postgres psql -c "ALTER USER sargon PASSWORD 'your-secure-password';"
 ```
 
 ## 5. Create the config file
 
-Create `/opt/gowiki/config.yaml`:
+Create `/opt/sargon/config.yaml`:
 
 ```yaml
-data_dir: /opt/gowiki/data
+data_dir: /opt/sargon/data
 
 server:
   tls_domain: wiki.example.com
-  web_dir: /opt/gowiki/frontend/dist
+  web_dir: /opt/sargon/frontend/dist
 
 site:
   title: My Wiki
@@ -90,32 +90,32 @@ auth:
 
 database:
   enabled: true
-  dsn: postgres://gowiki:your-secure-password@localhost/gowiki?sslmode=disable
+  dsn: postgres://gowiki:your-secure-password@localhost/sargon?sslmode=disable
 
 drafts:
   auto_save_interval: 2m
   stale_lock_timeout: 24h
 ```
 
-Adjust `tls_domain`, `base_url`, and `dsn` to match your setup. If PostgreSQL uses local peer auth (no password), the DSN is simply `postgres:///gowiki`.
+Adjust `tls_domain`, `base_url`, and `dsn` to match your setup. If PostgreSQL uses local peer auth (no password), the DSN is simply `postgres:///sargon`.
 
 **Important:** Always set `site.base_url` in production. When configured, the server rejects any HTTP request whose `Host` header does not match the expected hostname (returning a 404). This prevents the server from responding to requests via raw IP address or unexpected domain names pointing to the same server.
 
 ## 6. Create the systemd service
 
-Create `/etc/systemd/system/gowiki.service`:
+Create `/etc/systemd/system/sargon.service`:
 
 ```ini
 [Unit]
-Description=Gowiki
+Description=Sargon
 After=network.target postgresql.service
 Requires=postgresql.service
 
 [Service]
 Type=simple
-User=gowiki
-Group=gowiki
-ExecStart=/opt/gowiki/gowiki-server -config /opt/gowiki/config.yaml
+User=sargon
+Group=sargon
+ExecStart=/opt/sargon/sargon-server -config /opt/sargon/config.yaml
 Restart=on-failure
 RestartSec=5
 
@@ -123,7 +123,7 @@ RestartSec=5
 NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/gowiki
+ReadWritePaths=/opt/sargon
 PrivateTmp=true
 
 # Allow binding to ports 80 and 443
@@ -133,28 +133,28 @@ AmbientCapabilities=CAP_NET_BIND_SERVICE
 WantedBy=multi-user.target
 ```
 
-The `CAP_NET_BIND_SERVICE` capability lets the `gowiki` user bind to privileged ports (80, 443) without running as root.
+The `CAP_NET_BIND_SERVICE` capability lets the `sargon` user bind to privileged ports (80, 443) without running as root.
 
 ## 7. Start the service
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now gowiki
+sudo systemctl enable --now sargon
 ```
 
 Check that it started correctly:
 
 ```bash
-sudo systemctl status gowiki
-sudo journalctl -u gowiki -f
+sudo systemctl status sargon
+sudo journalctl -u sargon -f
 ```
 
 You should see logs like:
 
 ```
-config: /opt/gowiki/config.yaml
-serving frontend assets from /opt/gowiki/frontend/dist
-data root: /opt/gowiki/data
+config: /opt/sargon/config.yaml
+serving frontend assets from /opt/sargon/frontend/dist
+data root: /opt/sargon/data
 http: listening on :80 (ACME + redirect)
 https: listening on :443 (domain: wiki.example.com)
 ```
@@ -176,7 +176,7 @@ However, some settings are only read at startup and require a service restart:
 After changing any of these, restart the service:
 
 ```bash
-sudo systemctl restart gowiki
+sudo systemctl restart sargon
 ```
 
 ## 9. Verify
@@ -194,17 +194,17 @@ To deploy a new version:
 ```bash
 # Build locally
 make build-frontend
-cd backend && GOOS=linux GOARCH=amd64 go build -o gowiki-server ./cmd/server && cd ..
+cd backend && GOOS=linux GOARCH=amd64 go build -o sargon-server ./cmd/server && cd ..
 
 # Copy to server
-scp backend/gowiki-server $SERVER:/opt/gowiki/gowiki-server.new
-rsync -a --delete frontend/dist/ $SERVER:/opt/gowiki/frontend/dist/
+scp backend/sargon-server $SERVER:/opt/sargon/sargon-server.new
+rsync -a --delete frontend/dist/ $SERVER:/opt/sargon/frontend/dist/
 
 # On the server: swap binary and restart
 ssh $SERVER '
-  sudo systemctl stop gowiki
-  mv /opt/gowiki/gowiki-server.new /opt/gowiki/gowiki-server
-  sudo systemctl start gowiki
+  sudo systemctl stop sargon
+  mv /opt/sargon/sargon-server.new /opt/sargon/sargon-server
+  sudo systemctl start sargon
 '
 ```
 
@@ -216,24 +216,24 @@ The critical data to back up:
 
 | Path | Contents |
 |------|----------|
-| `/opt/gowiki/data/content/` | All wiki pages and media files |
-| `/opt/gowiki/data/meta/` | Users, groups, ACL, sessions, page metadata |
-| `/opt/gowiki/data/attic/` | Page version history |
-| `/opt/gowiki/config.yaml` | Site configuration |
-| PostgreSQL `gowiki` database | Todo tasks, structured data tables |
+| `/opt/sargon/data/content/` | All wiki pages and media files |
+| `/opt/sargon/data/meta/` | Users, groups, ACL, sessions, page metadata |
+| `/opt/sargon/data/attic/` | Page version history |
+| `/opt/sargon/config.yaml` | Site configuration |
+| PostgreSQL `sargon` database | Todo tasks, structured data tables |
 
 Example daily backup with cron:
 
 ```bash
 # /etc/cron.daily/gowiki-backup
 #!/bin/bash
-BACKUP_DIR=/var/backups/gowiki/$(date +%Y-%m-%d)
+BACKUP_DIR=/var/backups/sargon/$(date +%Y-%m-%d)
 mkdir -p "$BACKUP_DIR"
-rsync -a /opt/gowiki/data/ "$BACKUP_DIR/data/"
-cp /opt/gowiki/config.yaml "$BACKUP_DIR/"
-pg_dump -U gowiki gowiki | gzip > "$BACKUP_DIR/gowiki.sql.gz"
+rsync -a /opt/sargon/data/ "$BACKUP_DIR/data/"
+cp /opt/sargon/config.yaml "$BACKUP_DIR/"
+pg_dump -U sargon sargon | gzip > "$BACKUP_DIR/sargon.sql.gz"
 # Keep 30 days
-find /var/backups/gowiki -maxdepth 1 -mtime +30 -exec rm -rf {} +
+find /var/backups/sargon -maxdepth 1 -mtime +30 -exec rm -rf {} +
 ```
 
 ## Running without TLS
@@ -243,7 +243,7 @@ If you're behind a load balancer or reverse proxy that handles TLS, remove `tls_
 ```yaml
 server:
   addr: ":8080"
-  web_dir: /opt/gowiki/frontend/dist
+  web_dir: /opt/sargon/frontend/dist
 ```
 
 The server listens on plain HTTP. Your reverse proxy should forward to `:8080` and set `X-Forwarded-Proto: https`.
@@ -256,7 +256,7 @@ In this mode, remove `AmbientCapabilities=CAP_NET_BIND_SERVICE` from the systemd
 - Verify DNS: `dig wiki.example.com` must return the server's public IP.
 - Verify port 80 is reachable: `curl http://wiki.example.com` from another machine.
 - Check firewall: `sudo ufw status` or `sudo iptables -L -n`.
-- Check logs: `journalctl -u gowiki -e` for ACME errors.
+- Check logs: `journalctl -u sargon -e` for ACME errors.
 
 **"permission denied" binding to port 80/443**
 - Ensure `AmbientCapabilities=CAP_NET_BIND_SERVICE` is in the systemd unit.
@@ -265,7 +265,7 @@ In this mode, remove `AmbientCapabilities=CAP_NET_BIND_SERVICE` from the systemd
 **Database connection refused**
 - Check PostgreSQL is running: `sudo systemctl status postgresql`.
 - Check the DSN in config.yaml matches your PostgreSQL auth method (`peer` vs `md5`).
-- For local peer auth, the system user (`gowiki`) must match the PostgreSQL role name.
+- For local peer auth, the system user (`sargon`) must match the PostgreSQL role name.
 
 **OAuth callback URL mismatch**
 - Update `site.base_url` in config.yaml to match the public URL exactly.

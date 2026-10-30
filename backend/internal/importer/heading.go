@@ -9,7 +9,7 @@ import (
 // Level mapping: 6 = -> #, 5 = -> ##, 4 = -> ###, 3 = -> ####, 2 = -> #####
 var reHeading = regexp.MustCompile(`^(\s*)(={2,6})\s*(.+?)\s*={2,6}\s*$`)
 
-// ConvertHeading converts a DokuWiki heading line to Gowiki ATX heading.
+// ConvertHeading converts a DokuWiki heading line to Sargon ATX heading.
 // Returns the converted line and true if it was a heading, or the original line and false.
 func ConvertHeading(line string) (string, bool) {
 	m := reHeading.FindStringSubmatch(line)
@@ -31,7 +31,7 @@ func ConvertHeading(line string) (string, bool) {
 	title := strings.TrimSpace(m[3])
 
 	// DokuWiki numbered heading plugin uses "- " as a placeholder for auto-numbering.
-	// Gowiki uses "1. " prefix after the ATX marker: "## 1. Title"
+	// Sargon uses "1. " prefix after the ATX marker: "## 1. Title"
 	numbered := ""
 	if strings.HasPrefix(title, "- ") {
 		title = strings.TrimPrefix(title, "- ")
@@ -41,7 +41,7 @@ func ConvertHeading(line string) (string, bool) {
 	return prefix + " " + numbered + title, true
 }
 
-// HeadingAnchor converts a heading title to a Gowiki anchor slug.
+// HeadingAnchor converts a heading title to a Sargon anchor slug.
 // Used when resolving #section references in links.
 func HeadingAnchor(title string) string {
 	title = strings.ToLower(title)

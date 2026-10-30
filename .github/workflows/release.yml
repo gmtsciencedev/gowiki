@@ -152,8 +152,8 @@ jobs:
           set -euo pipefail
           commit=${GITHUB_SHA}
           build_date=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          ldflags="-X gowiki/backend/internal/api.BuildCommit=${commit} -X gowiki/backend/internal/api.BuildDate=${build_date}"
-          out=gowiki-server-${{ matrix.goos }}-${{ matrix.goarch }}
+          ldflags="-X sargon/backend/internal/api.BuildCommit=${commit} -X sargon/backend/internal/api.BuildDate=${build_date}"
+          out=sargon-server-${{ matrix.goos }}-${{ matrix.goarch }}
           go build -ldflags "${ldflags}" -o "${out}" ./cmd/server
           ls -lh "${out}"
       - name: Upload binary to release
@@ -164,7 +164,7 @@ jobs:
         # whole workflow when an operator retries.
         run: |
           gh release upload "${GITHUB_REF_NAME}" \
-            "backend/gowiki-server-${{ matrix.goos }}-${{ matrix.goarch }}" \
+            "backend/sargon-server-${{ matrix.goos }}-${{ matrix.goarch }}" \
             --clobber
 
   build-frontend:
@@ -190,7 +190,7 @@ jobs:
       - name: Package dist
         working-directory: frontend
         run: |
-          tarball="gowiki-frontend-dist-${GITHUB_REF_NAME}.tar.gz"
+          tarball="sargon-frontend-dist-${GITHUB_REF_NAME}.tar.gz"
           tar -czf "../${tarball}" dist
           ls -lh "../${tarball}"
       - name: Upload frontend bundle to release
@@ -198,5 +198,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload "${GITHUB_REF_NAME}" \
-            "gowiki-frontend-dist-${GITHUB_REF_NAME}.tar.gz" \
+            "sargon-frontend-dist-${GITHUB_REF_NAME}.tar.gz" \
             --clobber

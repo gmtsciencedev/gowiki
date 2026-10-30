@@ -14,12 +14,12 @@ import (
 	mcpgo "github.com/mark3labs/mcp-go/mcp"
 	mcpsrv "github.com/mark3labs/mcp-go/server"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/database"
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
-	"gowiki/backend/internal/todo"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/database"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
+	"sargon/backend/internal/todo"
 )
 
 func registerTools(srv *mcpsrv.MCPServer, deps Deps) {
@@ -161,7 +161,7 @@ func refuseIfValidatedWithoutForce(rf reviewflowStatusGetter, pagePath string, f
 func registerConventionsTool(srv *mcpsrv.MCPServer, _ Deps) {
 	tool := mcpgo.NewTool("get_conventions",
 		mcpgo.WithDescription(
-			"Return the Gowiki Markdown dialect rules, content guidelines, and write conventions. "+
+			"Return the Sargon Markdown dialect rules, content guidelines, and write conventions. "+
 				"CALL THIS BEFORE your first content read or write — the dialect rejects several common "+
 				"CommonMark constructs (underscore is underline, not italic; * is not a list marker; raw HTML is forbidden).",
 		),
@@ -1232,7 +1232,7 @@ func registerPreviewPageDiffTool(srv *mcpsrv.MCPServer, deps Deps) {
 			mcpgo.Description("Page path, leading slash optional."),
 		),
 		mcpgo.WithString("markdown", mcpgo.Required(),
-			mcpgo.Description("Proposed new markdown in the Gowiki dialect."),
+			mcpgo.Description("Proposed new markdown in the Sargon dialect."),
 		),
 	)
 	srv.AddTool(tool, func(ctx context.Context, req mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
@@ -1290,7 +1290,7 @@ func registerWritePageTool(srv *mcpsrv.MCPServer, deps Deps) {
 			mcpgo.Description("Page path, leading slash optional. Namespace indexes end with '/'."),
 		),
 		mcpgo.WithString("markdown", mcpgo.Required(),
-			mcpgo.Description("New markdown content in the Gowiki dialect."),
+			mcpgo.Description("New markdown content in the Sargon dialect."),
 		),
 		mcpgo.WithString("summary", mcpgo.Required(),
 			mcpgo.Description("Change summary. Required for audit. Format: '[AI: <tool-name>] <description>'."),

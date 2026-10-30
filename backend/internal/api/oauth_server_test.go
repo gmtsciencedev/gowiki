@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // newOAuthServerTestServer wires a Server with real OAuthServer, TokenStore,

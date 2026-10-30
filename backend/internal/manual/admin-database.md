@@ -4,7 +4,7 @@ Access: Admin > Database
 
 ## 1. Overview
 
-Gowiki supports structured data tables backed by PostgreSQL. Tables are defined by admins and used by wiki pages to store, query, and display structured information alongside free-form content.
+Sargon supports structured data tables backed by PostgreSQL. Tables are defined by admins and used by wiki pages to store, query, and display structured information alongside free-form content.
 
 ## 1. Connecting
 

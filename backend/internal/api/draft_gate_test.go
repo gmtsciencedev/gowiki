@@ -3,8 +3,8 @@ package api
 import (
 	"testing"
 
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/reviewflow"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/reviewflow"
 )
 
 // draftGate is the pure decision function behind

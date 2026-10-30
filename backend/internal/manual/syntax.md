@@ -1,6 +1,6 @@
 # Markdown Syntax
 
-Gowiki uses a custom Markdown dialect. It is **bijective**: each formatting has exactly one canonical syntax. This ensures lossless round-trips between the visual editor, raw editor, and stored content.
+Sargon uses a custom Markdown dialect. It is **bijective**: each formatting has exactly one canonical syntax. This ensures lossless round-trips between the visual editor, raw editor, and stored content.
 
 ## 1. Inline formatting
 

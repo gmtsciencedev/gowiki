@@ -9,7 +9,7 @@ Standard markdown blockquotes use `>` at the start of each line:
 > It can span multiple lines.
 ```
 
-> In Gowiki, blockquotes are extended with classes, icons, colors, and layout options — making them useful for callouts, admonitions, and page layout.
+> In Sargon, blockquotes are extended with classes, icons, colors, and layout options — making them useful for callouts, admonitions, and page layout.
 
 ## 1. Callout classes
 

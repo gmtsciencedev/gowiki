@@ -321,7 +321,7 @@ class TodoNodeView {
     // Disable checkbox if no task ID, inactive (page review pending),
     // or if a wiki action is set and user is not admin.
     const hasWikiAction = !!node.attrs.action
-    const user = (window as any).__gowikiCurrentUser
+    const user = (window as any).__sargonCurrentUser
     const isAdmin = user?.is_admin === true
     cb.disabled = !this.taskId || this.taskInactive || (hasWikiAction && !isAdmin)
     if (this.taskInactive) {
@@ -596,7 +596,7 @@ class TodoListNodeView {
   }
 
   private async fetchAndRender() {
-    const user = (window as any).__gowikiCurrentUser
+    const user = (window as any).__sargonCurrentUser
     if (!user?.username) {
       this.dom.innerHTML = ""
       return
@@ -813,7 +813,7 @@ class TodoCalendarNodeView {
   }
 
   private async fetchAndRender() {
-    const user = (window as any).__gowikiCurrentUser
+    const user = (window as any).__sargonCurrentUser
     if (!user?.username) {
       this.dom.innerHTML = ""
       return

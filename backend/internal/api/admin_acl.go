@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // handleListACL returns the current ACL ruleset.

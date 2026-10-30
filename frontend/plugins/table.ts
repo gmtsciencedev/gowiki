@@ -1,4 +1,4 @@
-import { Plugin as GowikiPlugin, NodePropertySpec } from "../compiler/registry"
+import { Plugin as SargonPlugin, NodePropertySpec } from "../compiler/registry"
 import {
   tableNodes,
   tableEditing,
@@ -1863,7 +1863,7 @@ export function makeTable(schema: any, rows: number, cols: number, withHeader = 
  * Table plugin — enhanced with headers, column properties,
  * cell color, cell merging, and formula support.
  */
-export const tablePlugin: GowikiPlugin = {
+export const tablePlugin: SargonPlugin = {
   register(reg) {
     reg.registerMarkdownItPlugin((md) => {
       md.use(markdownItMultiMdTable, {

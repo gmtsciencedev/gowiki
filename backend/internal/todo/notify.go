@@ -17,7 +17,7 @@ import (
 	"text/template"
 	"time"
 
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/config"
 )
 
 // ConfigReader provides live access to the current configuration.
@@ -433,13 +433,13 @@ func (d *Dispatcher) sendWebhook(wh config.TodoWebhookConfig, event NotifyEvent)
 		return
 	}
 	req.Header.Set("Content-Type", contentType)
-	req.Header.Set("User-Agent", "Gowiki-Todo/1.0")
+	req.Header.Set("User-Agent", "Sargon-Todo/1.0")
 
 	if wh.HMACSecret != "" {
 		mac := hmac.New(sha256.New, []byte(wh.HMACSecret))
 		mac.Write(payload)
 		sig := hex.EncodeToString(mac.Sum(nil))
-		req.Header.Set("X-Gowiki-Signature", "sha256="+sig)
+		req.Header.Set("X-Sargon-Signature", "sha256="+sig)
 	}
 
 	client := &http.Client{Timeout: 10 * time.Second}

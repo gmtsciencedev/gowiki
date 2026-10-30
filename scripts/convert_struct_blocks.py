@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert DokuWiki struct table/lookup blocks and form blocks to Gowiki database directives.
+"""Convert DokuWiki struct table/lookup blocks and form blocks to Sargon database directives.
 
 Handles:
   - ---- struct table ---- ... ---- → {database-query table=... fields="..." ...}
@@ -43,7 +43,7 @@ def convert_struct_block(lines):
         elif line.startswith("sort:"):
             raw_sort = line.split(":", 1)[1].strip()
             # DokuWiki sort can be multi-field: category,^provider,%title%
-            # We only support single sort in Gowiki, take the first one
+            # We only support single sort in Sargon, take the first one
             sort_fields = [s.strip() for s in raw_sort.split(",") if s.strip()]
             if sort_fields:
                 first = sort_fields[0]
@@ -100,7 +100,7 @@ def parse_form_block(lines):
             rest = line[len("Action template"):].strip()
             parts = rest.split(None, 1)
             if parts:
-                # Convert DokuWiki path (colons) to Gowiki path (slashes)
+                # Convert DokuWiki path (colons) to Sargon path (slashes)
                 template_path = "/" + parts[0].replace(":", "/")
             if len(parts) > 1:
                 # Parse page_folder and index_field from second part

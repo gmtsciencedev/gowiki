@@ -1,10 +1,10 @@
 # Importing from DokuWiki
 
-This guide covers migrating a complete DokuWiki installation into Gowiki. The process has two phases: an automated bulk import, then an AI-assisted refinement pass.
+This guide covers migrating a complete DokuWiki installation into Sargon. The process has two phases: an automated bulk import, then an AI-assisted refinement pass.
 
 ## Prerequisites
 
-- A working Gowiki installation (see `deploy.md`)
+- A working Sargon installation (see `deploy.md`)
 - A copy of the DokuWiki `data/` and `conf/` directories
 - PostgreSQL configured and running (for structured data import)
 - Go toolchain installed (to build the import tools)
@@ -27,7 +27,7 @@ import/
 
 ## 2. Phase A: Bulk content import
 
-The content importer converts DokuWiki markup to Gowiki markdown, copies media files, and imports users/groups/ACL.
+The content importer converts DokuWiki markup to Sargon markdown, copies media files, and imports users/groups/ACL.
 
 ```bash
 cd backend
@@ -37,7 +37,7 @@ go run ./cmd/import/ --src ../import --dest ./data
 | Flag | Description |
 |------|-------------|
 | `-src` | DokuWiki import root (contains `data/` and `conf/`) |
-| `-dest` | Gowiki data directory |
+| `-dest` | Sargon data directory |
 | `-dry-run` | Analyze without writing |
 | `-verbose` | Log each file |
 
@@ -124,11 +124,11 @@ go build -o import-struct ./cmd/import-struct/
 
 The tool imports reference/status tables first (to establish row IDs for foreign keys), then all remaining tables alphabetically. It is safe to re-run: existing tables are skipped.
 
-Tag/status tables are automatically normalized: if a table has `icon` and `color` fields but no `label` field, the first text field is renamed to `label` to match Gowiki's tag rendering convention.
+Tag/status tables are automatically normalized: if a table has `icon` and `color` fields but no `label` field, the first text field is renamed to `label` to match Sargon's tag rendering convention.
 
 ### Verify
 
-Check the imported data in the Gowiki admin UI (Database tab) or directly:
+Check the imported data in the Sargon admin UI (Database tab) or directly:
 
 ```bash
 psql -U gowiki -d gowiki -c 'SELECT name, label FROM database_tables ORDER BY name'
@@ -136,9 +136,9 @@ psql -U gowiki -d gowiki -c 'SELECT name, label FROM database_tables ORDER BY na
 
 ## 3b. Phase A3: Convert struct blocks to database directives
 
-After importing the structured data, the DokuWiki struct syntax remaining in the markdown files needs to be converted to Gowiki's native `{database-query}` and `{database-newrow}` directives.
+After importing the structured data, the DokuWiki struct syntax remaining in the markdown files needs to be converted to Sargon's native `{database-query}` and `{database-newrow}` directives.
 
-The bulk content import (Phase A) preserves `---- struct table ----`, `---- struct lookup ----`, and `<form>` blocks as-is (wrapped in code fences). The conversion script replaces them with Gowiki directives:
+The bulk content import (Phase A) preserves `---- struct table ----`, `---- struct lookup ----`, and `<form>` blocks as-is (wrapped in code fences). The conversion script replaces them with Sargon directives:
 
 ```bash
 # Dry run first
@@ -166,20 +166,20 @@ If namespaces were renamed (e.g., `ps03` → `soft`), the extracted paths will u
 
 ## 3c. Phase A4: Import status table icons
 
-DokuWiki's structstatus plugin uses SVG icons for status badges, stored on the DokuWiki server at `/var/www/dokuwiki/lib/plugins/structstatus/svg/`. After importing tag/status tables, copy these icons into Gowiki's content tree:
+DokuWiki's structstatus plugin uses SVG icons for status badges, stored on the DokuWiki server at `/var/www/dokuwiki/lib/plugins/structstatus/svg/`. After importing tag/status tables, copy these icons into Sargon's content tree:
 
 ```bash
 # Copy from DokuWiki server
 scp dokuwiki-server:/var/www/dokuwiki/lib/plugins/structstatus/svg/*.svg import/svg/
 
-# Upload to Gowiki content directory
+# Upload to Sargon content directory
 cp import/svg/*.svg /path/to/data/content/icons/
 
 # Update icon paths in all tag tables (bare name → content path)
 psql -U gowiki -d gowiki -c "UPDATE _my_status_table SET icon = '/icons/' || icon || '.svg';"
 ```
 
-Repeat the SQL update for each tag/status table. The icon field must contain a content path (e.g., `/icons/ovh.svg`) for Gowiki's tag badge renderer to fetch the SVG.
+Repeat the SQL update for each tag/status table. The icon field must contain a content path (e.g., `/icons/ovh.svg`) for Sargon's tag badge renderer to fetch the SVG.
 
 ## 4. Phase B: AI-assisted refinement
 
@@ -199,7 +199,7 @@ The agent reviews and proposes coherent naming across namespaces that may have e
 
 ### Struct field label translation
 
-If DokuWiki schema labels are in a non-English language, the agent can update field labels in the Gowiki database admin UI.
+If DokuWiki schema labels are in a non-English language, the agent can update field labels in the Sargon database admin UI.
 
 ## 5. Post-import checklist
 
@@ -218,7 +218,7 @@ If DokuWiki schema labels are in a non-English language, the agent can update fi
 
 ## Troubleshooting
 
-**Broken struct foreign keys**: If a Status or Lookup field shows the wrong value, the DokuWiki row IDs didn't match the import order. Check the DokuWiki SQLite database for the correct rid mapping and compare with Gowiki's row IDs.
+**Broken struct foreign keys**: If a Status or Lookup field shows the wrong value, the DokuWiki row IDs didn't match the import order. Check the DokuWiki SQLite database for the correct rid mapping and compare with Sargon's row IDs.
 
 **Missing pages for struct rows**: If `page_path` values in the database don't match any existing page, namespace renames may not be configured. Update the `namespaceRenames` map and re-import (delete the affected tables first via admin UI).
 

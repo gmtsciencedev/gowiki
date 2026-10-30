@@ -45,7 +45,7 @@ def fix_vtext_in_line(line):
 
 
 def get_dw_page_path(content_path, content_dir, dw_pages_dir):
-    """Convert a Gowiki content path to the corresponding DokuWiki page path."""
+    """Convert a Sargon content path to the corresponding DokuWiki page path."""
     rel = os.path.relpath(content_path, content_dir)
     # content/a/b/c.md → pages/a/b/c.txt
     if rel.endswith(".md"):
@@ -185,7 +185,7 @@ def restore_colors_in_file(filepath, content_dir, dw_pages_dir):
     # of their non-color text content (to match with converted lines)
     changed = False
 
-    # Process each Gowiki table line and try to find matching DokuWiki line
+    # Process each Sargon table line and try to find matching DokuWiki line
     for i, gw_line in enumerate(gw_lines):
         if not gw_line.startswith("|"):
             continue
@@ -230,7 +230,7 @@ def restore_colors_in_file(filepath, content_dir, dw_pages_dir):
         if best_match is None:
             continue
 
-        # Apply colors to the Gowiki cells
+        # Apply colors to the Sargon cells
         new_cells = []
         for j, gw_cell in enumerate(gw_cells):
             stripped = gw_cell.strip()

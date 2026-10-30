@@ -1,11 +1,11 @@
-# Gowiki — Reviewflow Plugin Specification
+# Sargon — Reviewflow Plugin Specification
 
 
 ## 1. Overview
 
-The **Reviewflow plugin** is a document validation workflow for Gowiki. A page declares named roles (author, reviewer, validator, or any custom role name), each assigned to a specific user. Every role-holder must confirm the current page version. Once all roles confirm, the version is tagged, recorded in history, and the page is marked as validated.
+The **Reviewflow plugin** is a document validation workflow for Sargon. A page declares named roles (author, reviewer, validator, or any custom role name), each assigned to a specific user. Every role-holder must confirm the current page version. Once all roles confirm, the version is tagged, recorded in history, and the page is marked as validated.
 
-Adapted from the DokuWiki reviewflow plugin, redesigned from scratch for Gowiki's architecture.
+Adapted from the DokuWiki reviewflow plugin, redesigned from scratch for Sargon's architecture.
 
 ### Design Goals
 
@@ -23,7 +23,7 @@ Adapted from the DokuWiki reviewflow plugin, redesigned from scratch for Gowiki'
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│                   Gowiki Core                         │
+│                   Sargon Core                         │
 │                                                       │
 │  ┌───────────────────────┐                            │
 │  │  reviewflow package   │                            │
@@ -54,7 +54,7 @@ Adapted from the DokuWiki reviewflow plugin, redesigned from scratch for Gowiki'
 └───────────────────────────────────────────────────────┘
 ```
 
-The Go backend package (`backend/internal/reviewflow/`) compiles into the core Gowiki binary. The TypeScript frontend is a standard Gowiki plugin bundle. The reviewflow service is always initialized at startup; the `reviewflow.enabled` config flag controls deadline computation and todo integration behavior.
+The Go backend package (`backend/internal/reviewflow/`) compiles into the core Sargon binary. The TypeScript frontend is a standard Sargon plugin bundle. The reviewflow service is always initialized at startup; the `reviewflow.enabled` config flag controls deadline computation and todo integration behavior.
 
 ---
 
@@ -414,7 +414,7 @@ On mount, fetches status from `GET /status/{pagePath}` (with `?v=N` when viewing
 
 When viewing an old page version from the history UI, the NodeView shows the reviewflow status as it was for that specific version:
 
-- The `viewVersion()` function in `main.js` sets `window.__gowikiViewingVersion` to the version number before mounting the read-only ProseMirror view. The NodeView captures this in its constructor as `historyVersion`.
+- The `viewVersion()` function in `main.js` sets `window.__sargonViewingVersion` to the version number before mounting the read-only ProseMirror view. The NodeView captures this in its constructor as `historyVersion`.
 - Status is fetched via `GET /status/{pagePath}?v=N`, which returns per-version confirmation state.
 - Validated versions show the green "Validated" badge; unvalidated versions show "DRAFT" with per-role confirmation status (pending/confirmed).
 - Confirm buttons are hidden (cannot confirm an old version).
@@ -684,7 +684,7 @@ If performance becomes an issue with many pages, a dedicated `GET /api/plugin/re
 
 ## 16. Decisions (continued)
 
-1. **Storage** — File-based JSON, not database. Reviewflow state is per-page and does not need cross-page queries, joins, or transactions. This aligns with how Gowiki stores page metadata under `data/meta/`.
+1. **Storage** — File-based JSON, not database. Reviewflow state is per-page and does not need cross-page queries, joins, or transactions. This aligns with how Sargon stores page metadata under `data/meta/`.
 
 2. **Arbitrary roles** — No fixed role taxonomy. Any `key=value` pair is a role. This maximizes flexibility for different organizations (some need author+reviewer, others need author+reviewer+validator+approver+...).
 

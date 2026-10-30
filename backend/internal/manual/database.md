@@ -148,7 +148,7 @@ Attributes other than `table=` and `fields=` are **field prefills**. Two shapes:
 
 Both forms resolve `{{fieldname}}` tokens from the current page's context (same resolver as `{database-query filter=…}`). Pinned values are always sent on submit, even if the DOM was tampered with — the directive is a rule. Default values travel with the submit only if the user leaves them unchanged.
 
-Example of a pinned prefill. On the page for software `gowiki`, this form pre-selects `software = gowiki` and prevents changing it:
+Example of a pinned prefill. On the page for software `sargon`, this form pre-selects `software = sargon` and prevents changing it:
 
 ```markdown
 {database-newrow table=software_validation software={{id}}}

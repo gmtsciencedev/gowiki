@@ -2,7 +2,7 @@
 
 ## Overview
 
-Gowiki runs as a single self-contained binary in production. The Go backend serves both the API and the bundled frontend assets, handles TLS termination via Let's Encrypt, and redirects HTTP to HTTPS. No reverse proxy (nginx, Caddy) is needed.
+Sargon runs as a single self-contained binary in production. The Go backend serves both the API and the bundled frontend assets, handles TLS termination via Let's Encrypt, and redirects HTTP to HTTPS. No reverse proxy (nginx, Caddy) is needed.
 
 ## Architecture
 
@@ -96,7 +96,7 @@ No config file needed. Uses defaults: `-data-dir ./backend/data`, plain HTTP on 
 ### Production with config file (recommended)
 
 ```bash
-gowiki-server -config /opt/gowiki/config.yaml
+sargon-server -config /opt/gowiki/config.yaml
 ```
 
 Everything is in the config file. The CLI is just the binary path and the config path.
@@ -104,7 +104,7 @@ Everything is in the config file. The CLI is just the binary path and the config
 ### Production without TLS
 
 ```bash
-gowiki-server -config /opt/gowiki/config.yaml
+sargon-server -config /opt/gowiki/config.yaml
 ```
 
 With config:
@@ -165,10 +165,10 @@ The debug profiling server (`:6060`) is only started when `tls_domain` is **not*
 ```bash
 # 1. Build
 make build-frontend
-cd backend && GOOS=linux GOARCH=amd64 go build -o gowiki-server ./cmd/server && cd ..
+cd backend && GOOS=linux GOARCH=amd64 go build -o sargon-server ./cmd/server && cd ..
 
 # 2. Copy to server
-scp backend/gowiki-server user@host:/opt/gowiki/
+scp backend/sargon-server user@host:/opt/gowiki/
 rsync -a frontend/dist/ user@host:/opt/gowiki/frontend/dist/
 rsync -a backend/data/ user@host:/opt/gowiki/data/
 
@@ -184,7 +184,7 @@ rsync -a backend/data/ user@host:/opt/gowiki/data/
 
 # 4. Systemd unit (/etc/systemd/system/gowiki.service)
 # [Unit]
-# Description=Gowiki
+# Description=Sargon
 # After=network.target postgresql.service
 # Requires=postgresql.service
 #
@@ -192,7 +192,7 @@ rsync -a backend/data/ user@host:/opt/gowiki/data/
 # Type=simple
 # User=gowiki
 # Group=gowiki
-# ExecStart=/opt/gowiki/gowiki-server -config /opt/gowiki/config.yaml
+# ExecStart=/opt/gowiki/sargon-server -config /opt/gowiki/config.yaml
 # Restart=on-failure
 # RestartSec=5
 # NoNewPrivileges=true

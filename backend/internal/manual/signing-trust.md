@@ -1,10 +1,10 @@
 # Document Signing — Trust Model & Verification
 
-This page documents the security model, trust assumptions, and verification procedures for Gowiki's document signing system. It is intended for auditors, quality managers, and anyone evaluating the integrity guarantees of signed documents.
+This page documents the security model, trust assumptions, and verification procedures for Sargon's document signing system. It is intended for auditors, quality managers, and anyone evaluating the integrity guarantees of signed documents.
 
 ## 1. Security model summary
 
-Gowiki's signing system provides cryptographic proof that a specific person confirmed a specific document at a specific time. The guarantees are:
+Sargon's signing system provides cryptographic proof that a specific person confirmed a specific document at a specific time. The guarantees are:
 
 | Property | Mechanism |
 | --- | --- |
@@ -28,7 +28,7 @@ For the verification to be meaningful, three trust anchors must be accepted:
 
 ### The Company CA
 
-The organization generates a root Certificate Authority (ECDSA P-256) hosted on the Gowiki server. All user certificates are signed by this CA.
+The organization generates a root Certificate Authority (ECDSA P-256) hosted on the Sargon server. All user certificates are signed by this CA.
 
 **Trust assumption:** the CA private key is protected and only used by authorized administrators. Anyone with access to the CA key could issue certificates for arbitrary users.
 
@@ -47,7 +47,7 @@ When a confirmation is recorded, the server requests an RFC 3161 timestamp from 
 {blockquote class=note}
 > **Trust model note:** By default, the verifier trusts any TSA certificate embedded in the timestamp token without anchoring it to a predefined root store. This is equivalent to trusting the TSA service configured at signing time. For higher assurance environments, the verifier should be configured with a pinned TSA root certificate or a restricted trust store.
 
-### The Gowiki server
+### The Sargon server
 
 The server stores confirmations, assembles the audit export, and mediates the signing flow. The server cannot forge signatures (it never has access to user private keys), but it controls:
 - Which markdown content is presented for signing
@@ -131,7 +131,7 @@ GET /api/plugin/reviewflow/v1/audit/{page-path}?version={N}
 
 ## 1. Standalone verification
 
-A Python verification tool is provided in `tools/verify-signatures/verify.py`. It is independent of Gowiki and uses only standard cryptography libraries.
+A Python verification tool is provided in `tools/verify-signatures/verify.py`. It is independent of Sargon and uses only standard cryptography libraries.
 
 ```bash
 pip install cryptography asn1crypto

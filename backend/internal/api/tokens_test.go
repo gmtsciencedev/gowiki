@@ -11,8 +11,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/auth"
-	"gowiki/backend/internal/config"
+	"sargon/backend/internal/auth"
+	"sargon/backend/internal/config"
 )
 
 // newTokensTestServer builds a Server with TokenStore + a config Store

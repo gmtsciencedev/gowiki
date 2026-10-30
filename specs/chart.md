@@ -8,7 +8,7 @@ The **Chart plugin** renders simple data charts (pie, bar, line, etc.) directly 
 
 - Simple syntax for common chart types — no JSON configuration, no external service
 - Client-side rendering via Chart.js (no network dependency, no rate limits)
-- Consistent with Gowiki's architecture: rendering is a frontend concern, markdown is the ground truth
+- Consistent with Sargon's architecture: rendering is a frontend concern, markdown is the ground truth
 - Plugin boundary respected: disabling the plugin leaves the fenced block intact (rendered as a code block fallback)
 - Round-trip safe: the `name = value` syntax is plain text, not parsed as markdown
 

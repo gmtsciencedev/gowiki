@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Plugin syntax converters for DokuWiki -> Gowiki.
+// Plugin syntax converters for DokuWiki -> Sargon.
 
 var (
 	// Include: {{page>ns:page}} or {{page>ns:page#section&opts}}
@@ -93,7 +93,7 @@ var (
 	reFoldClose = regexp.MustCompile(`^\+\+\+\+\s*$`)
 )
 
-// ConvertInclude converts a DokuWiki include to Gowiki.
+// ConvertInclude converts a DokuWiki include to Sargon.
 // pagesDir is the root pages/ directory, used to resolve first-heading anchors.
 func ConvertInclude(line string, currentNS string, pagesDir string) string {
 	return reInclude.ReplaceAllStringFunc(line, func(m string) string {
@@ -117,7 +117,7 @@ func ConvertInclude(line string, currentNS string, pagesDir string) string {
 		}
 
 		// Convert path
-		gowikiPath := DokuWikiLinkToPath(target, currentNS)
+		sargonPath := DokuWikiLinkToPath(target, currentNS)
 
 		if hasFirstSecOnly && anchor == "" {
 			// firstseconly -> resolve actual first heading from target page
@@ -128,7 +128,7 @@ func ConvertInclude(line string, currentNS string, pagesDir string) string {
 			}
 		}
 
-		return fmt.Sprintf("{include path=%s%s}", gowikiPath, anchor)
+		return fmt.Sprintf("{include path=%s%s}", sargonPath, anchor)
 	})
 }
 
@@ -174,7 +174,7 @@ func resolveFirstHeading(target string, currentNS string, pagesDir string) strin
 	return ""
 }
 
-// ConvertTag converts a DokuWiki tag directive to Gowiki.
+// ConvertTag converts a DokuWiki tag directive to Sargon.
 func ConvertTag(line string) string {
 	return reTag.ReplaceAllStringFunc(line, func(m string) string {
 		inner := reTag.FindStringSubmatch(m)[1]
@@ -183,7 +183,7 @@ func ConvertTag(line string) string {
 	})
 }
 
-// ConvertTopic converts a DokuWiki topic query to a Gowiki tag-query directive.
+// ConvertTopic converts a DokuWiki topic query to a Sargon tag-query directive.
 // Syntax: {{topic>NAMESPACE?TAGS&OPTION1&OPTION2}}
 // e.g. {{topic>.?sop&header&desc}} -> {tag-query tag=sop path=.}
 // e.g. {{topic>..:..?sop&header&desc}} -> {tag-query tag=sop path=../..}
@@ -226,11 +226,11 @@ func ConvertTopic(line string, currentNS string) string {
 	})
 }
 
-// ConvertACK converts a DokuWiki ACK directive to Gowiki todo.
-// ~~ACKNOWLEDGE~~ (no groups) is a query widget — flag it, no Gowiki equivalent.
+// ConvertACK converts a DokuWiki ACK directive to Sargon todo.
+// ~~ACKNOWLEDGE~~ (no groups) is a query widget — flag it, no Sargon equivalent.
 func ConvertACK(line string) string {
 	if reACKSimple.MatchString(line) {
-		return reACKSimple.ReplaceAllString(line, "`[IMPORT: ~~ACKNOWLEDGE~~ query widget — no Gowiki equivalent]`")
+		return reACKSimple.ReplaceAllString(line, "`[IMPORT: ~~ACKNOWLEDGE~~ query widget — no Sargon equivalent]`")
 	}
 	return reACK.ReplaceAllStringFunc(line, func(m string) string {
 		groups := reACK.FindStringSubmatch(m)[1]
@@ -244,7 +244,7 @@ func ConvertACK(line string) string {
 	})
 }
 
-// ConvertTodo converts a DokuWiki todo to Gowiki.
+// ConvertTodo converts a DokuWiki todo to Sargon.
 func ConvertTodo(line string) string {
 	return reTodo.ReplaceAllStringFunc(line, func(m string) string {
 		parts := reTodo.FindStringSubmatch(m)
@@ -280,7 +280,7 @@ func ConvertChanges(line string) string {
 	return reChanges.ReplaceAllString(line, "{changes}")
 }
 
-// ConvertTemplateVars converts DokuWiki template variables to Gowiki {{NAME}}.
+// ConvertTemplateVars converts DokuWiki template variables to Sargon {{NAME}}.
 // Handles both @!NAME!@ and @NAME@ forms.
 func ConvertTemplateVars(line string) string {
 	line = reTemplateVar.ReplaceAllString(line, "{{${1}}}")
@@ -345,7 +345,7 @@ func ConvertReviewflow(lines []string) string {
 	return "{reviewflow " + strings.Join(parts, " ") + "}"
 }
 
-// ConvertFigure converts a <figure> block to Gowiki image with caption.
+// ConvertFigure converts a <figure> block to Sargon image with caption.
 func ConvertFigure(lines []string, currentNS string) ([]string, []FlaggedLine) {
 	var images []string
 	caption := ""
@@ -483,7 +483,7 @@ func appendProp(existing, prop string) string {
 	return existing[:len(existing)-1] + " " + prop + "}"
 }
 
-// ConvertNBBlock converts an NB:: ... ::NB block to a Gowiki blockquote.
+// ConvertNBBlock converts an NB:: ... ::NB block to a Sargon blockquote.
 func ConvertNBBlock(lines []string, isWarning bool, currentNS string) []string {
 	class := "note"
 	if isWarning {
@@ -492,7 +492,7 @@ func ConvertNBBlock(lines []string, isWarning bool, currentNS string) []string {
 	return convertBlockquoteLines(lines, class, currentNS)
 }
 
-// ConvertNoteBlock converts a <note> ... </note> block to a Gowiki blockquote.
+// ConvertNoteBlock converts a <note> ... </note> block to a Sargon blockquote.
 func ConvertNoteBlock(lines []string, noteType string, currentNS string) []string {
 	class := "note"
 	switch strings.ToLower(noteType) {
@@ -577,7 +577,7 @@ func convertBlockquoteLines(lines []string, class string, currentNS string) []st
 	return out
 }
 
-// ConvertSliderPage converts a full page with <slider> tags to Gowiki slides.
+// ConvertSliderPage converts a full page with <slider> tags to Sargon slides.
 func ConvertSliderPage(lines []string, currentNS string, pagesDir string) ([]string, []FlaggedLine) {
 	var flagged []FlaggedLine
 	var slides [][]string

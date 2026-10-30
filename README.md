@@ -1,8 +1,8 @@
-# Gowiki
+# Sargon
 
-Gowiki is a modern wiki engine inspired by [DokuWiki](https://www.dokuwiki.org/), one of the best wikis in the world. It aims to preserve what DokuWiki got right — plain-text storage, versioning, extensibility — while replacing the pieces that could not evolve within the original codebase.
+Sargon (formerly Gowiki) is a modern wiki engine inspired by [DokuWiki](https://www.dokuwiki.org/), one of the best wikis in the world. It aims to preserve what DokuWiki got right — plain-text storage, versioning, extensibility — while replacing the pieces that could not evolve within the original codebase.
 
-Current release: **v1.0.0-rc.1**. See [`CHANGELOG.md`](CHANGELOG.md) for the full history.
+Current release: **v1.0.0-rc.5**. See [`CHANGELOG.md`](CHANGELOG.md) for the full history.
 
 ## What it borrows from DokuWiki
 
@@ -21,7 +21,7 @@ Current release: **v1.0.0-rc.1**. See [`CHANGELOG.md`](CHANGELOG.md) for the ful
 - **AI Content API + MCP server** — a personal-token REST API and a Streamable-HTTP MCP endpoint let AI assistants (Claude, ChatGPT, …) read, edit, and publish content on behalf of the user they are authenticated as. ACLs apply to both the caller and the `@ai` subject. See [MCP tools](#mcp-tools) below.
 - **Fewer but more powerful plugins** — `database`, `reviewflow`, `todo`, `comment`, `signing`, `bibliography`, `slide`, `chart`, `mermaid`, `tag`, `blockquote` (wraps + figures), `code_expand` (`@\`...\``), plus first-class table extensions (formulas, column rules, cell merging).
 
-These changes — particularly the switch to Markdown and the ProseMirror-first architecture — are too fundamental to be contributed back to DokuWiki. Gowiki is a separate project that stands on DokuWiki's shoulders.
+These changes — particularly the switch to Markdown and the ProseMirror-first architecture — are too fundamental to be contributed back to DokuWiki. Sargon is a separate project that stands on DokuWiki's shoulders.
 
 ## Features at a glance
 
@@ -77,14 +77,14 @@ Backend has no Node.js dependency. Frontend has no Go dependency. This is an inv
 Cross-compile the backend and build the frontend statically:
 
 ```sh
-cd backend && GOOS=linux GOARCH=amd64 go build -o gowiki-server ./cmd/server
+cd backend && GOOS=linux GOARCH=amd64 go build -o sargon-server ./cmd/server
 cd frontend && npm install && npx vite build
 ```
 
 Serve everything from the Go binary — it embeds the frontend `dist/` and serves it as static assets alongside the API:
 
 ```sh
-./gowiki-server --config /path/to/config.yaml
+./sargon-server --config /path/to/config.yaml
 ```
 
 `config.yaml` covers data root, listening address (HTTP or HTTPS with automatic Let's Encrypt), auth backends, plugin toggles, AI provider keys, rate limits, and email/SMTP.
@@ -175,9 +175,15 @@ Without a reachable Postgres, integration tests `t.Skipf` (they don't fail); uni
 
 Every push runs `make test-backend`, `make test-frontend`, `make test-integration`, `golangci-lint`, ESLint and Prettier via GitHub Actions. A red CI blocks merges to `main`.
 
+## The name and the logo
+
+The project is named after **Sargon of Akkad** (reigned c. 2334–2279 BC), who united the Sumerian city-states into the first empire of Mesopotamia. Writing had been invented in Sumer a few centuries earlier, and under Sargon cuneiform and its scribes spread across the whole region. His daughter Enheduanna, high priestess of the moon god at Ur, is the first author in history known by name. A wiki is a corpus of written text held in common, and Sargon's court was one of the first places where such a corpus existed at that scale.
+
+The logo is a **lamassu**, the winged guardian with a human head and the body of a bull or lion that stood at the gates of Assyrian palaces. It belongs to a later king: **Sargon II** of Assyria (reigned 722–705 BC), who took the name of his Akkadian predecessor — *Šarru-kīn*, "the legitimate king" — and lined the gates of his capital, Dur-Šarrukīn (Khorsabad), with lamassu. Several of them stand today in the Louvre. The name honours the first Sargon; the logo borrows from the second.
+
 ## License
 
-Gowiki is licensed under the **GNU General Public License v3.0** (GPL-3.0). In tribute to DokuWiki's open-source tradition, we chose the GPL family to ensure this project remains open.
+Sargon is licensed under the **GNU General Public License v3.0** (GPL-3.0). In tribute to DokuWiki's open-source tradition, we chose the GPL family to ensure this project remains open.
 
 ## Acknowledgments
 

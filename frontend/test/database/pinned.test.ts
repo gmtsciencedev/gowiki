@@ -6,7 +6,7 @@
 //      pinning has run, the synthetic option we prepended (value
 //      only, no label) must be relabelled with the real option's
 //      text and the duplicate must be hidden. Otherwise the reader
-//      sees the raw id ("1") beside the resolved label ("Gowiki").
+//      sees the raw id ("1") beside the resolved label ("Sargon").
 //
 //   2. A pinned select must expose the pinned value via `.value` for
 //      the JSON submitter to pick up. The DOM `disabled` attribute
@@ -52,13 +52,13 @@ describe("applyPinnedValue — select", () => {
     // Simulate the async foreign-key loader appending the real option.
     const real = document.createElement("option")
     real.value = "1"
-    real.textContent = "Gowiki"
+    real.textContent = "Sargon"
     sel.appendChild(real)
 
     await nextTick()
 
     // The synthetic (still at index 0) now carries the real label.
-    expect(sel.options[0].textContent).toBe("Gowiki")
+    expect(sel.options[0].textContent).toBe("Sargon")
     // And the duplicate is hidden so the (locked) dropdown doesn't
     // show two entries with the same value.
     expect(real.hidden).toBe(true)
@@ -67,21 +67,21 @@ describe("applyPinnedValue — select", () => {
   it("does NOT prepend a synthetic when the target value is already loaded", () => {
     const sel = document.createElement("select")
     sel.appendChild(Object.assign(document.createElement("option"), { value: "", textContent: "-- Select --" }))
-    sel.appendChild(Object.assign(document.createElement("option"), { value: "1", textContent: "Gowiki" }))
+    sel.appendChild(Object.assign(document.createElement("option"), { value: "1", textContent: "Sargon" }))
 
     applyPinnedValue(sel, "1")
 
     // The real option is selected; no synthetic was added.
     expect(sel.value).toBe("1")
     expect(sel.options[0].dataset.pinnedSynthetic).toBeUndefined()
-    // The Gowiki option now shows selected.
+    // The Sargon option now shows selected.
     expect(sel.options[1].selected).toBe(true)
   })
 
   it("snaps back to the pinned value if a change event tries to move it", () => {
     const sel = document.createElement("select")
     sel.appendChild(Object.assign(document.createElement("option"), { value: "", textContent: "-- Select --" }))
-    sel.appendChild(Object.assign(document.createElement("option"), { value: "1", textContent: "Gowiki" }))
+    sel.appendChild(Object.assign(document.createElement("option"), { value: "1", textContent: "Sargon" }))
     sel.appendChild(Object.assign(document.createElement("option"), { value: "2", textContent: "Other" }))
 
     applyPinnedValue(sel, "1")

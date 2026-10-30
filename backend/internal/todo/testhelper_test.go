@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/database"
+	"sargon/backend/internal/database"
 )
 
 // Per-test isolated Postgres database. Mirrors the helper in

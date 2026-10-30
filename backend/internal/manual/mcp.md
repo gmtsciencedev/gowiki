@@ -1,6 +1,6 @@
 # MCP (Model Context Protocol) Server
 
-Gowiki exposes its AI-oriented API as a full MCP server at `/api/mcp/v1`. An MCP client (Claude Desktop, Claude.ai, Cursor, any MCP-compatible agent) can connect to the wiki as a tool provider, giving the LLM structured access to your pages, todos, structured-data tables, and reviewflow state.
+Sargon exposes its AI-oriented API as a full MCP server at `/api/mcp/v1`. An MCP client (Claude Desktop, Claude.ai, Cursor, any MCP-compatible agent) can connect to the wiki as a tool provider, giving the LLM structured access to your pages, todos, structured-data tables, and reviewflow state.
 
 The MCP server is a thin wrapper around the existing AI Content API (`/api/ai/v1/…`). Everything it does is subject to the same ACL model: the authenticated user AND the `@ai` pseudo-subject must both have permission to view (or edit) a page for the operation to succeed.
 
@@ -44,7 +44,7 @@ Pick one of the two auth flows below, save the file, then **fully quit** Claude 
    ```json
    {
      "mcpServers": {
-       "gowiki": {
+       "sargon": {
          "command": "npx",
          "args": [
            "-y",
@@ -65,7 +65,7 @@ Pick one of the two auth flows below, save the file, then **fully quit** Claude 
 ```json
 {
   "mcpServers": {
-    "gowiki": {
+    "sargon": {
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://YOUR-WIKI-HOST/api/mcp/v1"]
     }
@@ -84,7 +84,7 @@ Claude.ai's web app supports remote MCP servers natively — no local proxy, no 
 1. In claude.ai, open **Settings** → **Connectors** (labelled **Integrations** in some workspaces). Click **Add custom connector**.
 2. Paste `https://YOUR-WIKI-HOST/api/mcp/v1`. For this wiki that's @`https://{{SERVER}}/api/mcp/v1`. Confirm.
 3. A wiki page opens asking you to sign in (if you're not already) and approve access. Approve.
-4. Return to Claude — `gowiki` tools are now available in every conversation.
+4. Return to Claude — `sargon` tools are now available in every conversation.
 
 **Per-user vs org-wide.** On a Team or Enterprise plan an admin can add the connector once at the workspace level so every member inherits it, or each user can add it individually — both work. Either way, each user's session gets **their own** OAuth token bound to their own wiki identity, so page-level ACLs still apply per user (the `@ai` pseudo-subject gates it further).
 
@@ -100,7 +100,7 @@ Claude Code supports remote HTTP MCP servers natively. Two paths:
 2. Register the connector — pick a scope:
 
    ```bash
-   claude mcp add gowiki --transport http https://YOUR-WIKI-HOST/api/mcp/v1 \
+   claude mcp add sargon --transport http https://YOUR-WIKI-HOST/api/mcp/v1 \
      --header "Authorization: Bearer gwk_YOUR_TOKEN" -s local
    ```
 
@@ -112,7 +112,7 @@ Claude Code supports remote HTTP MCP servers natively. Two paths:
    - `user` — every project on this machine, private to you
    - `project` — this project, shared with teammates (stored in `.mcp.json`, commit to git)
 
-3. Verify with `claude mcp list` or `claude mcp get gowiki`. In a fresh `claude` session the `mcp__gowiki__*` tools appear directly.
+3. Verify with `claude mcp list` or `claude mcp get sargon`. In a fresh `claude` session the `mcp__gowiki__*` tools appear directly.
 
 **With OAuth (browser consent flow):**
 
@@ -120,7 +120,7 @@ Omit the `--header` flag and Claude Code will fall back to OAuth on first use �
 
 **Troubleshooting — connector stuck on auth stubs:**
 
-If `mcp__gowiki__authenticate` shows up instead of the real tool list, Claude Code has cached a failed handshake. In the running session type `/mcp` to open the MCP panel and pick **Reconnect** on `gowiki` — it clears the state and re-does the handshake with the current stored auth. Faster than restarting the whole CLI. Only fall back to `claude mcp remove gowiki && claude mcp add ...` when `/mcp` reconnect doesn't recover.
+If `mcp__gowiki__authenticate` shows up instead of the real tool list, Claude Code has cached a failed handshake. In the running session type `/mcp` to open the MCP panel and pick **Reconnect** on `sargon` — it clears the state and re-does the handshake with the current stored auth. Faster than restarting the whole CLI. Only fall back to `claude mcp remove sargon && claude mcp add ...` when `/mcp` reconnect doesn't recover.
 
 ### mcp-inspector or any raw MCP client
 

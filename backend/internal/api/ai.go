@@ -8,8 +8,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/storage"
 )
 
 // handleAINamespace lists pages and sub-namespaces under a path.
@@ -293,7 +293,7 @@ func (s *Server) handleAIMeta(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleAIConventions(w http.ResponseWriter, _ *http.Request) {
 	conventions := map[string]any{
 		"dialect": map[string]any{
-			"name":        "Gowiki Markdown",
+			"name":        "Sargon Markdown",
 			"description": "A bijective Markdown dialect. One canonical syntax per node type. Round-trip lossless.",
 			"rules": []string{
 				"*italic* only — _italic_ is NOT italic, it is underline",
@@ -349,7 +349,7 @@ func (s *Server) handleAIConventions(w http.ResponseWriter, _ *http.Request) {
 			"summary_example":    "[AI: Claude] Translate section 3 to English",
 			"summary_required":   "Summary is required for all token-authenticated writes",
 			"optimistic_locking": "Always read the page first, then write with expected_version set to the version you read",
-			"user_agent":         "Set User-Agent: <tool>/1.0 (gowiki-ai-api; user=<username>)",
+			"user_agent":         "Set User-Agent: <tool>/1.0 (sargon-ai-api; user=<username>)",
 			"authentication":     "Preferred: Authorization: Bearer gwk_<token> header. Fallback: ?token=gwk_<token> query parameter (for platforms that cannot set custom headers).",
 		},
 		"quality_checks": map[string]any{

@@ -13,7 +13,7 @@ make it explicit — ISO 13485 §4.2.4 for a quality system — but a handbook, 
 report series or a meeting record raises the same question as soon as its form
 changes.
 
-Gowiki templates are copied by hand. The page holds a tracking block, a
+Sargon templates are copied by hand. The page holds a tracking block, a
 horizontal rule, and below it the section a user selects and pastes into a new
 page. Nothing in that gesture tells the wiki that a copy happened, so the origin
 has to be written into the template in advance, as ordinary text:
@@ -140,7 +140,7 @@ It replaces the escaped-directive workaround entirely.
 
 ### Composition with existing page templates
 
-Gowiki already has a notion of template: pages bound to a database row through
+Sargon already has a notion of template: pages bound to a database row through
 `{{field}}` placeholders, such as `capa_template` or `provider_template`. The
 directives above do not compete with it, and should be usable inside one.
 

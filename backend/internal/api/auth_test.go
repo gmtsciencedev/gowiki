@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/auth"
+	"sargon/backend/internal/auth"
 )
 
 // newAuthTestServer wires the minimum a login/logout/me test needs: real

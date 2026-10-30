@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"gowiki/backend/internal/config"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/config"
+	"sargon/backend/internal/storage"
 )
 
 // todoSpy records CancelReviewTasks/CreateReviewTasks/CompleteReviewTasks

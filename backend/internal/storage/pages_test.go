@@ -10,7 +10,7 @@ import (
 )
 
 // FileStore is the core page storage layer — every page read and write
-// in Gowiki routes through it. Coverage focus:
+// in Sargon routes through it. Coverage focus:
 // - happy-path round-trips (Put/Get/Delete)
 // - meta lifecycle (versioning, author, dedup)
 // - attic archival on write

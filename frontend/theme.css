@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════
-   Gowiki theme system — CSS custom properties.
+   Sargon theme system — CSS custom properties.
 
    Every themeable value lives here. Core CSS and plugin CSS must read from
    these vars via `var(--gw-*)` rather than using raw hex colors.

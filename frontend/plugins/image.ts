@@ -32,7 +32,7 @@ const imageProperties = [
     options: (attrs: Record<string, any>) => {
       const opts = [{ value: "", label: "(default)" }]
       const src = attrs.src || ""
-      const cache = (window as any).__gowikiMediaVersions as Map<string, number> | undefined
+      const cache = (window as any).__sargonMediaVersions as Map<string, number> | undefined
       const maxVersion = cache?.get(src) ?? 0
       const currentV = attrs.version
       const currentN = currentV && currentV !== "latest" ? parseInt(currentV, 10) : 0
@@ -326,7 +326,7 @@ class ImageNodeView {
     } else {
       delete this.imgEl.dataset.bg
       // Returning to auto — re-run the heuristic on this image.
-      const runner = (window as any).__gowikiAutoFrameImage
+      const runner = (window as any).__sargonAutoFrameImage
       if (typeof runner === "function") {
         try {
           runner(this.imgEl)

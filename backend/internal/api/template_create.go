@@ -8,8 +8,8 @@ import (
 	"sort"
 	"strings"
 
-	"gowiki/backend/internal/markdown"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/markdown"
+	"sargon/backend/internal/storage"
 )
 
 // ── Types ──────────────────────────────────────────────────────────────

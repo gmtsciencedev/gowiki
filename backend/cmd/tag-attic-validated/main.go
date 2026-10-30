@@ -15,8 +15,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gowiki/backend/internal/reviewflow"
-	"gowiki/backend/internal/storage"
+	"sargon/backend/internal/reviewflow"
+	"sargon/backend/internal/storage"
 )
 
 func main() {

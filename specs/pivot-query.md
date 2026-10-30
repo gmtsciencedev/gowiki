@@ -1,7 +1,7 @@
 # Feature request — pivot mode for `{database-query}`
 
 Raised 2026-09-17 while modelling the IOScope/BiomScope **version matrix (VMA)**
-in Gowiki tables.
+in Sargon tables.
 
 ## 1. Problem
 

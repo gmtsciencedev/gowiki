@@ -1,4 +1,4 @@
-module gowiki/backend
+module sargon/backend
 
 go 1.25.0
 
