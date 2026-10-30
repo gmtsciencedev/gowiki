@@ -13938,7 +13938,17 @@ async function bootstrap() {
     // CMD+K in visual mode while the editor has lost focus (e.g. after a
     // click in the page margin): ProseMirror's own keymap never sees the
     // key, so refocus the editor and run the link command at its caret.
-    if (e.key === "k" && !e.shiftKey && editMode === "visual" && editorView && !editorView.hasFocus()) {
+    // Only when ProseMirror did not handle the key itself: when it did, it
+    // opened the dialog and moved focus there before this handler runs.
+    if (
+      e.key === "k" &&
+      !e.shiftKey &&
+      !e.defaultPrevented &&
+      !linkDialogOpen &&
+      editMode === "visual" &&
+      editorView &&
+      !editorView.hasFocus()
+    ) {
       e.preventDefault()
       editorView.focus()
       setExternalLinkCommand()(editorView.state, editorView.dispatch, editorView)
