@@ -744,11 +744,16 @@ function promptLinkForm(initialTarget, initialText) {
   })
 }
 
+// The caret counts as "in a link" only strictly inside it. At either
+// edge the user is typing next to the link, and Cmd+K inserts a new one.
 function findLinkRangeAtCursor(state) {
   const linkType = state.schema.marks.link
   if (!linkType) return null
   if (!state.selection.empty) return null
-  return findLinkRangeAtPosition(state.doc, linkType, state.selection.from)
+  const pos = state.selection.from
+  const range = findLinkRangeAtPosition(state.doc, linkType, pos)
+  if (!range || pos <= range.from || pos >= range.to) return null
+  return range
 }
 
 function isSameLinkMark(a, b) {
@@ -813,36 +818,10 @@ function findLinkRangeForSelection(state) {
   return linkAtAnchor
 }
 
-function findWordRangeAtCursor(state) {
-  if (!state.selection.empty) return null
-
-  const $from = state.selection.$from
-  const parent = $from.parent
-  const parentStart = $from.start()
-  const isWordChar = (ch) => /[A-Za-z0-9_]/.test(ch)
-
-  let childInfo = parent.childAfter($from.parentOffset)
-  if (!childInfo.node && $from.parentOffset > 0) {
-    childInfo = parent.childBefore($from.parentOffset)
-  }
-  if (!childInfo.node || !childInfo.node.isText) return null
-
-  const text = childInfo.node.text ?? ""
-  const textOffset = Math.max(0, $from.parentOffset - childInfo.offset)
-
-  let start = textOffset
-  while (start > 0 && isWordChar(text[start - 1])) start--
-
-  let end = textOffset
-  while (end < text.length && isWordChar(text[end])) end++
-
-  if (start === end) return null
-
-  return {
-    from: parentStart + childInfo.offset + start,
-    to: parentStart + childInfo.offset + end,
-  }
-}
+// True while the Cmd+K link dialog is open. The editor loses focus to
+// the dialog; the blur tidy-up is skipped meanwhile so the text the user
+// was typing (e.g. a trailing space) stays exactly as it was.
+let linkDialogOpen = false
 
 function setExternalLinkCommand() {
   return (state, dispatch, view) => {
@@ -861,16 +840,15 @@ function setExternalLinkCommand() {
     } else if (!state.selection.empty) {
       target = { from: state.selection.from, to: state.selection.to }
       currentText = state.doc.textBetween(state.selection.from, state.selection.to, "")
-    } else {
-      const wordRange = findWordRangeAtCursor(state)
-      if (wordRange) {
-        target = wordRange
-        currentText = state.doc.textBetween(wordRange.from, wordRange.to, "")
-      }
     }
+    // With nothing selected and the caret outside any link, Cmd+K inserts
+    // a new link at the caret. The text is left empty so the link shows
+    // the target page's title; the neighbouring word is left alone.
 
     const promptSeed = currentHref || "https://"
+    linkDialogOpen = true
     void promptLinkForm(promptSeed, currentText).then((form) => {
+      linkDialogOpen = false
       if (form === null) return
       const activeState = view.state
       const activeDispatch = view.dispatch
@@ -889,8 +867,6 @@ function setExternalLinkCommand() {
           from: activeState.selection.from,
           to: activeState.selection.to,
         }
-      } else {
-        activeTarget = findWordRangeAtCursor(activeState)
       }
 
       const normalized = form.target
@@ -902,20 +878,20 @@ function setExternalLinkCommand() {
         href: normalized,
         autoText: isAutoText,
       })
-      let markFrom = activeState.selection.from
-      let markTo = markFrom
       if (activeTarget) {
         tr.insertText(displayText, activeTarget.from, activeTarget.to)
-        markFrom = activeTarget.from
-        markTo = activeTarget.from + displayText.length
+        const markFrom = activeTarget.from
+        const markTo = activeTarget.from + displayText.length
+        tr.removeMark(markFrom, markTo, activeLinkType)
+        tr.addMark(markFrom, markTo, linkMark)
+        tr.setSelection(TextSelection.create(tr.doc, markTo))
       } else {
-        tr.insertText(displayText, activeState.selection.from, activeState.selection.to)
-        markFrom = activeState.selection.from
-        markTo = activeState.selection.from + displayText.length
+        // Caret (text cursor or gap cursor): insert a linked text node.
+        // replaceSelectionWith wraps it in a paragraph where text is not
+        // allowed directly, and leaves the caret right after the link.
+        tr.replaceSelectionWith(activeState.schema.text(displayText, [linkMark]), false)
       }
-      tr.removeMark(markFrom, markTo, activeLinkType)
-      tr.addMark(markFrom, markTo, linkMark)
-      tr.setSelection(TextSelection.create(tr.doc, markTo))
+      tr.removeStoredMark(activeLinkType)
       setStatus("Link updated")
       activeDispatch(tr.scrollIntoView())
       view.focus()
@@ -6958,8 +6934,20 @@ function renderEdit(nextEditMode) {
       return true
     },
     handleDOMEvents: {
-      blur(view) {
+      blur(view, event) {
         if (mode !== "edit" || editMode !== "visual") return false
+        // Focus moving to a dialog or to the edit actions bar is part of
+        // the user's edit (insert a link, pick a file), not the end of it.
+        // Tidying the document then would strip what they were typing
+        // under the caret — a trailing space, for one.
+        const next = event && event.relatedTarget
+        if (
+          linkDialogOpen ||
+          (next instanceof Element &&
+            (actionsRoot?.contains(next) || next.closest('[class*="modal-overlay"], .gowiki-raw-editor-overlay')))
+        ) {
+          return false
+        }
         try {
           const serialized = pmToMarkdown(view.state.doc, registry)
           const normalized = normalizeMarkdownForStorage(serialized)
