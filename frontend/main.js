@@ -1,4 +1,4 @@
-import { EditorState, TextSelection, Plugin } from "prosemirror-state"
+import { EditorState, TextSelection, Selection, Plugin } from "prosemirror-state"
 import { EditorView, Decoration, DecorationSet } from "prosemirror-view"
 import { Slice } from "prosemirror-model"
 import { schema as basicSchema } from "prosemirror-schema-basic"
@@ -1877,8 +1877,21 @@ function applyNormalizedEditState(normalized) {
   }
 
   if (editMode === "visual" && editorView && normalized.changed) {
-    const tr = editorView.state.tr
-    tr.replaceWith(0, editorView.state.doc.content.size, normalized.doc.content)
+    // Replace only the span that normalization changed. Replacing the
+    // whole document maps the caret to the end of the page, so a link or
+    // attachment inserted after a blur (dialog, media manager) landed at
+    // the bottom instead of where the user was.
+    const oldDoc = editorView.state.doc
+    const newDoc = normalized.doc
+    const start = oldDoc.content.findDiffStart(newDoc.content)
+    if (start == null) return
+    let { a: endA, b: endB } = oldDoc.content.findDiffEnd(newDoc.content)
+    const overlap = start - Math.min(endA, endB)
+    if (overlap > 0) {
+      endA += overlap
+      endB += overlap
+    }
+    const tr = editorView.state.tr.replace(start, endA, newDoc.slice(start, endB))
     tr.setMeta("addToHistory", false)
     editorView.dispatch(tr)
   }
@@ -7656,6 +7669,26 @@ function exitHistoryView() {
   currentDoc = markdownToPM(currentMarkdown, registry)
   setMode("view")
 }
+
+// A click in the page margin beside the visual editor lands on one of
+// its container elements, which takes focus away from the editor: the
+// caret disappears and keyboard shortcuts such as Cmd+K stop reaching
+// ProseMirror. Place the caret at the nearest document position at that
+// height instead, as a word processor does.
+document.addEventListener("mousedown", (e) => {
+  if (e.button !== 0 || mode !== "edit" || editMode !== "visual" || !editorView) return
+  const target = e.target
+  if (!(target instanceof Element) || !target.contains(editorView.dom) || editorView.dom.contains(target)) return
+  const box = editorView.dom.getBoundingClientRect()
+  if (e.clientY < box.top || e.clientY > box.bottom) return
+  const left = Math.min(Math.max(e.clientX, box.left + 1), box.right - 1)
+  const hit = editorView.posAtCoords({ left, top: e.clientY })
+  if (!hit) return
+  e.preventDefault()
+  const sel = Selection.near(editorView.state.doc.resolve(hit.pos))
+  editorView.dispatch(editorView.state.tr.setSelection(sel))
+  editorView.focus()
+})
 
 window.addEventListener("popstate", (e) => {
   if (inHistoryView) {
@@ -13912,6 +13945,15 @@ async function bootstrap() {
     if (e.key === "k" && !e.shiftKey && editMode === "raw" && rawEditor) {
       e.preventDefault()
       void rawInsertLink(rawEditor)
+      return
+    }
+    // CMD+K in visual mode while the editor has lost focus (e.g. after a
+    // click in the page margin): ProseMirror's own keymap never sees the
+    // key, so refocus the editor and run the link command at its caret.
+    if (e.key === "k" && !e.shiftKey && editMode === "visual" && editorView && !editorView.hasFocus()) {
+      e.preventDefault()
+      editorView.focus()
+      setExternalLinkCommand()(editorView.state, editorView.dispatch, editorView)
       return
     }
     if (e.key === "s" && e.shiftKey) {
