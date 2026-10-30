@@ -10,48 +10,72 @@ project's design invariants and `specs/` for the dialect specification.
 
 ## [Unreleased]
 
+Nothing pending — the working tree matches `v1.0.0-rc.6`.
+
+## [1.0.0-rc.6] — 2026-10-30
+
+Sixth release candidate, and the first under the name **Sargon**. The
+project leaves its working title before v1.0.0, while no one outside
+the first deployment depends on it. Alongside the rename, the RC adds
+signing-order control for reviewflow, notification throttling, and
+multi-series charts, and fixes a restart loop that flooded signers
+with duplicate emails.
+
 ### Changed
 
-- **Renamed from Gowiki to Sargon.** The repository moved to
+- **Gowiki is now Sargon.** The repository lives at
   `github.com/sargonwiki/sargon` (GitHub redirects the old
-  `delahondes/gowiki` URLs); the Go module is `sargon/backend`; binaries
-  and release artifacts are `sargon-server-*` and
-  `sargon-frontend-dist-*`; the MCP server announces itself as
-  `sargon-mcp`; new signing CAs default to `O=Sargon` and self-signed
-  certificates carry `O=Sargon Self-Signed`. Certificates and signatures
-  issued under the old name stay valid — the organisation field is
-  never checked. New logo (a lamassu) and favicons. Internal identifiers
-  that are persisted or used as parse hooks keep their `gowiki` prefix:
-  CSS classes, the `gowiki_session` and `gowiki_theme` cookies, and
-  browser storage keys. Existing sessions and preferences carry over.
-- Locally built binaries are no longer tracked in git.
+  `delahondes/gowiki` URLs); the Go module is `sargon/backend`; release
+  artifacts are `sargon-server-*` and `sargon-frontend-dist-*`; the MCP
+  server announces itself as `sargon-mcp`. New signing CAs default to
+  `O=Sargon` and self-signed certificates carry `O=Sargon Self-Signed`;
+  certificates and signatures issued under the old name stay valid,
+  since the organisation field is never checked. New logo — a
+  lamassu — and favicons; the README explains the name. Persisted
+  identifiers keep their `gowiki` prefix (CSS classes, which double as
+  parse hooks; the `gowiki_session` and `gowiki_theme` cookies; browser
+  storage keys), so sessions and preferences carry over.
 
 ### Added
 
-- **Multi-series charts**: `|`-separated values give grouped bars and
-  multi-line charts.
-- **Notification throttling**: per-user debounce window (admin setting)
-  groups task notifications into one email; at most one email per user
-  per document per day.
-- **Reviewflow `manual_release=yes`**: a "Ready for signature" checkbox
-  gates the first signature request. Signers are alerted one at a time,
-  in the order the roles are written; `parallel=true` alerts everyone
-  at once.
-- **Backlinks of row-bound pages** list the pages whose
+- **Signers are alerted one at a time.** A reviewflow now notifies each
+  signer only when it is their turn, in the order the roles are written
+  in the directive; `parallel=true` restores everyone-at-once. With
+  `manual_release=yes`, a "Ready for signature" checkbox holds the
+  first alert until the first signer, or anyone with edit rights, ticks
+  it. The tick is stored in the reviewflow state and can be undone
+  until the first signature.
+- **Notification throttling.** Task notifications to one user are
+  grouped into a single email over a debounce window set in the admin
+  UI, and a user receives at most one email per document per day,
+  across every task notification channel.
+- **Multi-series charts.** `|`-separated values in a chart table give
+  grouped bars and multi-line charts.
+- **Backlinks of row-bound pages** now list the pages whose
   `{database-query}` reads that row's table.
 
 ### Fixed
 
-- Reviewflow reconciler no longer recreates review tasks on every
-  restart (which re-sent notification emails), and reports only the
-  pages it actually changed.
-- Diff viewer wraps long lines instead of scrolling sideways.
-- Editor: the caret no longer jumps to the end of the page when the
-  editor loses focus, so links and attachments are inserted at the
-  caret (notably inside lists).
-- Cmd+K with nothing selected inserts a new link at the caret, using
-  the target page's title; it no longer takes over the previous word
-  or drops a typed space, and opens exactly one dialog.
+- **Signers received the same email again after every restart.** The
+  startup reconciler recreated open review tasks instead of comparing
+  them with the ones already there, and each recreated task sent a
+  fresh notification — 19 emails overnight in one reported case. It
+  now reconciles by difference and reports only the pages it changed.
+- **Links and attachments landed at the bottom of the page.** The
+  tidy-up the editor runs when it loses focus replaced the whole
+  document, which moved the caret to the end; opening the link dialog
+  or the media manager triggered it. The tidy-up now replaces only the
+  changed range, and waits while a dialog is open.
+- **Cmd+K swallowed the previous word.** With nothing selected, Cmd+K
+  now inserts a new link at the caret showing the target page's title,
+  keeps a just-typed space, and opens exactly one dialog; a selection
+  still becomes the link text. Shipped across three mid-rc fixes.
+- **Long lines in the diff viewer** wrap with a hanging indent instead
+  of scrolling sideways.
+
+### Internal
+
+- Locally built binaries (about 132 MB) are no longer tracked in git.
 
 ## [1.0.0-rc.5] — 2026-10-09
 
