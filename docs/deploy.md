@@ -189,26 +189,7 @@ You should get a `200 OK` with a valid TLS certificate.
 
 ## Updating
 
-To deploy a new version:
-
-```bash
-# Build locally
-make build-frontend
-cd backend && GOOS=linux GOARCH=amd64 go build -o sargon-server ./cmd/server && cd ..
-
-# Copy to server
-scp backend/sargon-server $SERVER:/opt/sargon/sargon-server.new
-rsync -a --delete frontend/dist/ $SERVER:/opt/sargon/frontend/dist/
-
-# On the server: swap binary and restart
-ssh $SERVER '
-  sudo systemctl stop sargon
-  mv /opt/sargon/sargon-server.new /opt/sargon/sargon-server
-  sudo systemctl start sargon
-'
-```
-
-The graceful shutdown waits up to 10 seconds for in-flight requests to complete before stopping.
+To upgrade an existing installation to a newer release, follow [`UPGRADE.md`](../UPGRADE.md).
 
 ## Backups
 

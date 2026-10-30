@@ -4,6 +4,12 @@ Sargon (formerly Gowiki) is a modern wiki engine inspired by [DokuWiki](https://
 
 Current release: **v1.0.0-rc.6**. See [`CHANGELOG.md`](CHANGELOG.md) for the full history.
 
+## The name and the logo
+
+The project is named after **Sargon of Akkad** (reigned c. 2334–2279 BC), who united the Sumerian city-states into the first empire of Mesopotamia. Writing had been invented in Sumer a few centuries earlier, and under Sargon cuneiform and its scribes spread across the whole region. His daughter Enheduanna, high priestess of the moon god at Ur, is the first author in history known by name. A wiki is a corpus of written text held in common, and Sargon's court was one of the first places where such a corpus existed at that scale.
+
+The logo is a **lamassu**, the winged guardian with a human head and the body of a bull or lion that stood at the gates of Assyrian palaces. It belongs to a later king: **Sargon II** of Assyria (reigned 722–705 BC), who took the name of his Akkadian predecessor — *Šarru-kīn*, "the legitimate king" — and lined the gates of his capital, Dur-Šarrukīn (Khorsabad), with lamassu. Several of them stand today in the Louvre. The name honours the first Sargon; the logo borrows from the second.
+
 ## What it borrows from DokuWiki
 
 - **Plain text storage** — content is stored as human-readable Markdown files, not in a database. Backup and version-control the `data/` directory and you're done.
@@ -91,6 +97,8 @@ Serve everything from the Go binary — it embeds the frontend `dist/` and serve
 
 The reference production deployment is at `wiki.gmt.bio` (single binary on a Debian host behind systemd, TLS terminated by the binary).
 
+For a first installation, follow [`docs/deploy.md`](docs/deploy.md). To upgrade an existing installation to a newer release, follow [`UPGRADE.md`](UPGRADE.md).
+
 ## HTTP API
 
 Read the OpenAPI spec at `/api/openapi.json` on a running instance. High-level:
@@ -174,12 +182,6 @@ Without a reachable Postgres, integration tests `t.Skipf` (they don't fail); uni
 ### CI
 
 Every push runs `make test-backend`, `make test-frontend`, `make test-integration`, `golangci-lint`, ESLint and Prettier via GitHub Actions. A red CI blocks merges to `main`.
-
-## The name and the logo
-
-The project is named after **Sargon of Akkad** (reigned c. 2334–2279 BC), who united the Sumerian city-states into the first empire of Mesopotamia. Writing had been invented in Sumer a few centuries earlier, and under Sargon cuneiform and its scribes spread across the whole region. His daughter Enheduanna, high priestess of the moon god at Ur, is the first author in history known by name. A wiki is a corpus of written text held in common, and Sargon's court was one of the first places where such a corpus existed at that scale.
-
-The logo is a **lamassu**, the winged guardian with a human head and the body of a bull or lion that stood at the gates of Assyrian palaces. It belongs to a later king: **Sargon II** of Assyria (reigned 722–705 BC), who took the name of his Akkadian predecessor — *Šarru-kīn*, "the legitimate king" — and lined the gates of his capital, Dur-Šarrukīn (Khorsabad), with lamassu. Several of them stand today in the Louvre. The name honours the first Sargon; the logo borrows from the second.
 
 ## License
 
